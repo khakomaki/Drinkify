@@ -40,6 +40,12 @@ fun AddDrinkDialog(
                     },
                     placeholder = { Text(text = "Drink name") }
                 )
+                // live validation for name
+                if(state.name.isBlank()) {
+                    Text(text = "Type name for drink", color = Color.Red)
+                } else {
+                    Text(text = "", color = Color.Transparent)
+                }
 
                 // amount
                 Row(
@@ -60,6 +66,8 @@ fun AddDrinkDialog(
                 // live validation for amount
                 if(state.amountInMl <= 0) {
                     Text(text = "Enter a number greater than 0", color = Color.Red)
+                } else {
+                    Text(text = "", color = Color.Transparent)
                 }
 
                 // alcohol percentage
@@ -81,6 +89,8 @@ fun AddDrinkDialog(
                 // live validation for percentage
                 if(state.alcoholPercentage < 0 || 100 < state.alcoholPercentage) {
                     Text(text = "Enter a valid percentage", color = Color.Red)
+                } else {
+                    Text(text = "", color = Color.Transparent)
                 }
             }
         },
