@@ -68,11 +68,13 @@ fun DrinkScreen(
                                 },
                                 verticalAlignment = CenterVertically
                         ) {
-                            RadioButton(selected = state.sortType == sortType, onClick = {
-                                onEvent(DrinkEvent.sortDrinks(sortType))
+                            RadioButton(
+                                selected = state.sortType == sortType,
+                                onClick = {
+                                    onEvent(DrinkEvent.sortDrinks(sortType))
                                 }
                             )
-                            Text(text = sortType.name)
+                            Text(text = sortType.displayName)
                         }
                     }
                 }
@@ -97,14 +99,14 @@ fun DrinkScreen(
                             text = "${drink.alcoholPercentage}%",
                             fontSize = 12.sp
                         )
-                        IconButton(onClick = {
-                            onEvent(DrinkEvent.deleteDrink(drink))
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete drink"
-                            )
-                        }
+                    }
+                    IconButton(onClick = {
+                        onEvent(DrinkEvent.deleteDrink(drink))
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete drink"
+                        )
                     }
                 }
 

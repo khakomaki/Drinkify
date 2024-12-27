@@ -1,7 +1,7 @@
 package com.example.drinkify.drinks
 
-enum class SortType {
-    NAME,
-    AMOUNT_ML,
-    ALC_PERCENTAGE
+enum class SortType(val displayName: String) {
+    NAME("Name"),
+    AMOUNT_ML("Amount"),
+    ALC_PERCENTAGE("Alcohol %")
 }
