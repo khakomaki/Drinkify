@@ -84,6 +84,7 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
                     isEditingDrink = false,
                     selectedDrink = null
                 ) }
+                clearDialogState()
             }
 
             // saving new drink
