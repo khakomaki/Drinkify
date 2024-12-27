@@ -1,4 +1,4 @@
-package com.example.drinkify.model
+package com.example.drinkify.core.models
 
 data class User (
     var name: String = "User",

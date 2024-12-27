@@ -1,7 +1,9 @@
-package com.example.drinkify.model
+package com.example.drinkify.drinks
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.drinkify.core.models.Drink
+import com.example.drinkify.core.database.DrinkDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

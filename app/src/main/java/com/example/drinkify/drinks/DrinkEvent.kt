@@ -1,4 +1,6 @@
-package com.example.drinkify.model
+package com.example.drinkify.drinks
+
+import com.example.drinkify.core.models.Drink
 
 sealed interface DrinkEvent {
     object saveDrink: DrinkEvent

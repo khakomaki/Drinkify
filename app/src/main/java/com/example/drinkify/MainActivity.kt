@@ -9,9 +9,9 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
-import com.example.drinkify.model.DrinkDatabase
-import com.example.drinkify.model.DrinkScreen
-import com.example.drinkify.model.DrinkViewModel
+import com.example.drinkify.core.database.DrinkDatabase
+import com.example.drinkify.drinks.DrinkScreen
+import com.example.drinkify.drinks.DrinkViewModel
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {

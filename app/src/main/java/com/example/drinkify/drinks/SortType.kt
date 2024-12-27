@@ -1,4 +1,4 @@
-package com.example.drinkify.model
+package com.example.drinkify.drinks
 
 enum class SortType {
     NAME,

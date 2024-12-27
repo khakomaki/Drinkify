@@ -1,4 +1,4 @@
-package com.example.drinkify.model
+package com.example.drinkify.drinks
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -1,6 +1,7 @@
-package com.example.drinkify.model
+package com.example.drinkify.core.database
 
 import androidx.room.*
+import com.example.drinkify.core.models.Drink
 import kotlinx.coroutines.flow.Flow
 
 @Dao

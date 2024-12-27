@@ -1,4 +1,4 @@
-package com.example.drinkify.model
+package com.example.drinkify.core.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
