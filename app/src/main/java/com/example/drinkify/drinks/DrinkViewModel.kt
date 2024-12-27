@@ -43,7 +43,10 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
             }
             DrinkEvent.hideDialog -> {
                 _state.update { it.copy(
-                    isAddingDrink = false
+                    isAddingDrink = false,
+                    isDeletingDrink = false,
+                    isEditingDrink = false,
+                    selectedDrink = null
                 ) }
             }
             DrinkEvent.saveDrink -> {
@@ -51,7 +54,14 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
                 val amountInMl = _state.value.amountInMl
                 val alcoholPercentage = _state.value.alcoholPercentage
 
-                if(name.isBlank() || amountInMl <= 0 || alcoholPercentage < 0 || 100 < alcoholPercentage) {
+                // validate drink
+                if(name.isBlank()) { // name
+                    return
+                }
+                if(amountInMl <= 0) { // amount
+                    return
+                }
+                if(alcoholPercentage < 0 || 100 < alcoholPercentage) { // alcohol %
                     return
                 }
 
@@ -92,6 +102,12 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
             }
             is DrinkEvent.sortDrinks -> {
                 _sortType.value = event.sortType
+            }
+            is DrinkEvent.showDeleteConfirmation -> {
+                _state.update { it.copy(
+                    isDeletingDrink = true,
+                    selectedDrink = event.drink
+                )}
             }
         }
     }

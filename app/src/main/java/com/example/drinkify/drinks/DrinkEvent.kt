@@ -13,4 +13,5 @@ sealed interface DrinkEvent {
 
     data class sortDrinks(val sortType: SortType): DrinkEvent
     data class deleteDrink(val drink: Drink): DrinkEvent
+    data class showDeleteConfirmation(val drink: Drink): DrinkEvent
 }

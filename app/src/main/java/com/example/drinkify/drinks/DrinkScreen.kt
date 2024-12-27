@@ -14,12 +14,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -48,6 +50,28 @@ fun DrinkScreen(
         if(state.isAddingDrink) {
             AddDrinkDialog(state = state, onEvent = onEvent)
         }
+        if(state.isDeletingDrink && state.selectedDrink != null) {
+            AlertDialog(
+                onDismissRequest = { onEvent(DrinkEvent.hideDialog ) },
+                title = { Text("Confirm deletion") },
+                text = { Text("Do you want to delete \"${state.selectedDrink.name}\"?") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        onEvent(DrinkEvent.deleteDrink(state.selectedDrink))
+                        onEvent(DrinkEvent.hideDialog)
+                    }) {
+                        Text("Delete")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { onEvent(DrinkEvent.hideDialog) }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+
+        // List of existing drinks
         LazyColumn(
             contentPadding = padding,
             modifier = Modifier.fillMaxSize(),
@@ -101,7 +125,7 @@ fun DrinkScreen(
                         )
                     }
                     IconButton(onClick = {
-                        onEvent(DrinkEvent.deleteDrink(drink))
+                        onEvent(DrinkEvent.showDeleteConfirmation(drink))
                     }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
