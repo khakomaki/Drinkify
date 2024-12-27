@@ -22,7 +22,13 @@ fun AddDrinkDialog(
             onEvent(DrinkEvent.hideDialog)
         },
         title = {
-            Text(text = "Add drink")
+            Text(
+                if (state.isEditingDrink) {
+                    "Edit drink"
+                } else {
+                    "Add drink"
+                }
+            )
         },
         text = {
             Column(
@@ -59,9 +65,21 @@ fun AddDrinkDialog(
         },
         confirmButton = {
             Button(onClick = {
-                onEvent(DrinkEvent.saveDrink)
+                onEvent(
+                    if(state.isEditingDrink) {
+                        DrinkEvent.saveEditedDrink
+                    } else {
+                        DrinkEvent.saveDrink
+                    }
+                )
             }) {
-                Text(text = "Save")
+                Text(
+                    if(state.isEditingDrink) {
+                        "Save changes"
+                    } else {
+                        "Save"
+                    }
+                )
             }
         },
         dismissButton = {

@@ -36,6 +36,51 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
 
     fun onEvent(event: DrinkEvent) {
         when(event) {
+            // editing drink
+            is DrinkEvent.editDrink -> {
+                _state.update { it.copy(
+                    isEditingDrink = true,
+                    isAddingDrink = true,
+                    selectedDrink = event.drink,
+                    name = event.drink.name,
+                    amountInMl = event.drink.amountInMl,
+                    alcoholPercentage = event.drink.alcoholPercentage
+                )}
+            }
+            DrinkEvent.saveEditedDrink -> {
+                val editedDrink = _state.value.selectedDrink?.copy(
+                    name = _state.value.name,
+                    amountInMl = _state.value.amountInMl,
+                    alcoholPercentage = _state.value.alcoholPercentage
+                )
+
+                // validate drink
+                if (editedDrink == null) {
+                    return
+                }
+                if(editedDrink.name.isBlank()) { // name
+                    return
+                }
+                if(editedDrink.amountInMl <= 0) { // amount
+                    return
+                }
+                if(editedDrink.alcoholPercentage < 0 || 100 < editedDrink.alcoholPercentage) { // alcohol %
+                    return
+                }
+                // update edited drink
+                viewModelScope.launch {
+                    dao.upsertDrink(editedDrink)
+                }
+                _state.update { it.copy(
+                    isEditingDrink = false,
+                    isAddingDrink = false,
+                    selectedDrink = null,
+                    name = "",
+                    amountInMl = 0,
+                    alcoholPercentage = 0f
+                ) }
+            }
+            // deleting drink
             is DrinkEvent.deleteDrink -> {
                 viewModelScope.launch {
                     dao.deleteDrink(event.drink)
