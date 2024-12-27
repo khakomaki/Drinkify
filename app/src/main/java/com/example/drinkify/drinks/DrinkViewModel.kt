@@ -47,46 +47,37 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
                     alcoholPercentage = event.drink.alcoholPercentage
                 )}
             }
-            DrinkEvent.saveEditedDrink -> {
-                val editedDrink = _state.value.selectedDrink?.copy(
+
+            // saving edited drink
+            is DrinkEvent.saveEditedDrink -> {
+                // return immediately if no drink is selected
+                val selectedDrink = _state.value.selectedDrink ?: return
+                val editedDrink = selectedDrink.copy(
                     name = _state.value.name,
                     amountInMl = _state.value.amountInMl,
                     alcoholPercentage = _state.value.alcoholPercentage
                 )
-
                 // validate drink
-                if (editedDrink == null) {
-                    return
-                }
-                if(editedDrink.name.isBlank()) { // name
-                    return
-                }
-                if(editedDrink.amountInMl <= 0) { // amount
-                    return
-                }
-                if(editedDrink.alcoholPercentage < 0 || 100 < editedDrink.alcoholPercentage) { // alcohol %
-                    return
-                }
+                if(!isDrinkValid(
+                        editedDrink.name,
+                        editedDrink.amountInMl,
+                        editedDrink.alcoholPercentage
+                )) return
                 // update edited drink
-                viewModelScope.launch {
-                    dao.upsertDrink(editedDrink)
-                }
-                _state.update { it.copy(
-                    isEditingDrink = false,
-                    isAddingDrink = false,
-                    selectedDrink = null,
-                    name = "",
-                    amountInMl = 0,
-                    alcoholPercentage = 0f
-                ) }
+                viewModelScope.launch { dao.upsertDrink(editedDrink) }
+                // clear dialog
+                clearDialogState()
             }
+
             // deleting drink
             is DrinkEvent.deleteDrink -> {
                 viewModelScope.launch {
                     dao.deleteDrink(event.drink)
                 }
             }
-            DrinkEvent.hideDialog -> {
+
+            // hiding dialog
+            is DrinkEvent.hideDialog -> {
                 _state.update { it.copy(
                     isAddingDrink = false,
                     isDeletingDrink = false,
@@ -94,60 +85,58 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
                     selectedDrink = null
                 ) }
             }
-            DrinkEvent.saveDrink -> {
+
+            // saving new drink
+            is DrinkEvent.saveDrink -> {
                 val name = _state.value.name
                 val amountInMl = _state.value.amountInMl
                 val alcoholPercentage = _state.value.alcoholPercentage
-
                 // validate drink
-                if(name.isBlank()) { // name
-                    return
-                }
-                if(amountInMl <= 0) { // amount
-                    return
-                }
-                if(alcoholPercentage < 0 || 100 < alcoholPercentage) { // alcohol %
-                    return
-                }
-
+                if(!isDrinkValid(name, amountInMl, alcoholPercentage)) return
                 val drink = Drink(
                     name = name,
                     amountInMl = amountInMl,
                     alcoholPercentage = alcoholPercentage
                 )
-                viewModelScope.launch {
-                    dao.upsertDrink(drink)
-                }
-                _state.update { it.copy(
-                    isAddingDrink = false,
-                    name = "",
-                    amountInMl = 0,
-                    alcoholPercentage = 0f
-                )}
+                viewModelScope.launch { dao.upsertDrink(drink) }
+                // clear dialog
+                clearDialogState()
             }
+
+            // setting alcohol percentage
             is DrinkEvent.setAlcoholPercentage -> {
                 _state.update { it.copy(
                     alcoholPercentage = event.alcoholPercentage
                 ) }
             }
+
+            // setting amount
             is DrinkEvent.setAmountMl -> {
                 _state.update { it.copy(
                     amountInMl = event.amountMl
                 ) }
             }
+
+            // setting name
             is DrinkEvent.setName -> {
                 _state.update { it.copy(
                     name = event.name
                 ) }
             }
-            DrinkEvent.showDialog -> {
+
+            // showing drink dialog
+            is DrinkEvent.showDialog -> {
                 _state.update { it.copy(
                     isAddingDrink = true
                 ) }
             }
+
+            // sorting drinks
             is DrinkEvent.sortDrinks -> {
                 _sortType.value = event.sortType
             }
+
+            // confirming drink deletion
             is DrinkEvent.showDeleteConfirmation -> {
                 _state.update { it.copy(
                     isDeletingDrink = true,
@@ -155,5 +144,35 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
                 )}
             }
         }
+    }
+
+    // validates if drink can be saved with the given values
+    private fun isDrinkValid(name: String, amount: Int, percentage: Float): Boolean {
+        // name
+        if(name.isBlank()) {
+            return false
+        }
+        // amount
+        if(amount <= 0) {
+            return false
+        }
+        // alcohol %
+        if(percentage < 0 || 100 < percentage) {
+            return false
+        }
+        // return true if drink is valid
+        return true
+    }
+
+    // sets dialog state to default values
+    private fun clearDialogState() {
+        _state.update { it.copy(
+            isEditingDrink = false,
+            isAddingDrink = false,
+            isDeletingDrink = false,
+            name = "",
+            amountInMl = 0,
+            alcoholPercentage = 0f
+        )}
     }
 }
