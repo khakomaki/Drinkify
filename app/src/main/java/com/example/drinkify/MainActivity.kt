@@ -12,6 +12,7 @@ import androidx.room.Room
 import com.example.drinkify.core.database.DrinkDatabase
 import com.example.drinkify.drinks.DrinkScreen
 import com.example.drinkify.drinks.DrinkViewModel
+import com.example.drinkify.navi.AppNavigation
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {
@@ -34,7 +35,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val state by viewModel.state.collectAsState()
-            DrinkScreen(state = state, onEvent = viewModel::onEvent)
+            // DrinkScreen(state = state, onEvent = viewModel::onEvent)
+            AppNavigation(viewModel = viewModel)
         }
     }
 }

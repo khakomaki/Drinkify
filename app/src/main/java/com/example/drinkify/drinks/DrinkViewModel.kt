@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.drinkify.core.models.Drink
 import com.example.drinkify.core.database.DrinkDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -33,6 +34,19 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
             sortType = sortType
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000), DrinkState())
+
+    // update BAC counter
+    init {
+        viewModelScope.launch {
+            while(true) {
+                val updatedBAC = calculateBAC()
+                _state.update { currentState ->
+                    currentState.copy(BAC = updatedBAC)
+                }
+                delay(5000L) // update every 5s
+            }
+        }
+    }
 
     fun onEvent(event: DrinkEvent) {
         when(event) {
@@ -145,6 +159,12 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
                 )}
             }
         }
+    }
+
+    // calculates blood alcohol content
+    fun calculateBAC(): Float {
+        // TODO implement BAC calculation logic
+        return 15.5f
     }
 
     // validates if drink can be saved with the given values
