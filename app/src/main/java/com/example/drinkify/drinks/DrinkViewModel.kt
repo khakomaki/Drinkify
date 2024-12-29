@@ -1,5 +1,6 @@
 package com.example.drinkify.drinks
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drinkify.core.models.Drink

@@ -5,13 +5,28 @@ import androidx.lifecycle.viewModelScope
 import com.example.drinkify.core.database.UserDao
 import com.example.drinkify.core.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val userDao: UserDao): ViewModel() {
     private val _state = MutableStateFlow(ProfileState())
-    val state: StateFlow<ProfileState> = _state.asStateFlow()
+    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ProfileState())
+
+    init {
+        loadProfile()
+    }
+
+    private fun loadProfile() {
+        viewModelScope.launch {
+            val user = userDao.getUser()
+            _state.value = _state.value.copy(
+                name = user?.name ?: "",
+                sex = user?.sex ?: "",
+                weight = user?.weightKg ?: 0f
+            )
+        }
+    }
 
     fun onEvent(event: ProfileEvent) {
         when (event) {
@@ -31,7 +46,7 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
             }
 
             // save profile
-            ProfileEvent.SaveProfile -> {
+            ProfileEvent.saveProfile -> {
                 val name = _state.value.name
                 val sex = _state.value.sex
                 val weight = _state.value.weight

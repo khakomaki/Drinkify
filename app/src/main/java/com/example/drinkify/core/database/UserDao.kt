@@ -8,6 +8,6 @@ interface UserDao {
     @Query("SELECT * FROM user_table LIMIT 1")
     suspend fun getUser(): User?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertUser(user: User)
 }

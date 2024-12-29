@@ -55,7 +55,7 @@ fun ProfileScreen(
 
         // save button
         Button(onClick = {
-            ProfileEvent.SaveProfile
+            onEvent(ProfileEvent.saveProfile)
         }) {
             Text("Save")
         }
