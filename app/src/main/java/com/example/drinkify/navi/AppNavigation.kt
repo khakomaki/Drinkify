@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.drinkify.drinks.DrinkScreen
 import com.example.drinkify.drinks.DrinkViewModel
 import com.example.drinkify.mainscreen.MainScreen
+import com.example.drinkify.profile.ProfileScreen
 
 @Composable
 fun AppNavigation(viewModel: DrinkViewModel) {
@@ -19,13 +20,26 @@ fun AppNavigation(viewModel: DrinkViewModel) {
         composable("main") {
             MainScreen(
                 BAC = state.BAC,
-                onNavigateToDrinks = { navController.navigate("drinks") }
+                onNavigateToDrinks = { navController.navigate("drinks") },
+                onNavigateToProfile = { navController.navigate("profile") }
             )
         }
         composable("drinks") {
             DrinkScreen(
                 state = state,
                 onEvent = viewModel::onEvent
+            )
+        }
+
+        composable("profile") {
+            ProfileScreen(
+                name = state.user?.name ?: "",
+                sex = state.user?.sex ?: "",
+                weight = state.user?.weightKg ?: 0f,
+                onSave = { name, sex, weight ->
+                    viewModel.updateUser(name, sex, weight)
+                    navController.popBackStack()
+                }
             )
         }
     }

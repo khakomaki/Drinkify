@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drinkify.core.models.Drink
 import com.example.drinkify.core.database.DrinkDao
+import com.example.drinkify.core.database.UserDao
+import com.example.drinkify.core.models.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,15 +17,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
+class DrinkViewModel(private val drinkDao: DrinkDao, private val userDao: UserDao): ViewModel() {
 
     private val _sortType = MutableStateFlow(SortType.NAME)
     private val _drinks = _sortType
         .flatMapLatest { sortType ->
             when(sortType) {
-                SortType.NAME -> dao.getAllDrinksByName()
-                SortType.AMOUNT_ML -> dao.getAllDrinksByAmount()
-                SortType.ALC_PERCENTAGE -> dao.getAllDrinksByAlcoholPercentage()
+                SortType.NAME -> drinkDao.getAllDrinksByName()
+                SortType.AMOUNT_ML -> drinkDao.getAllDrinksByAmount()
+                SortType.ALC_PERCENTAGE -> drinkDao.getAllDrinksByAlcoholPercentage()
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
@@ -78,7 +80,7 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
                         editedDrink.alcoholPercentage
                 )) return
                 // update edited drink
-                viewModelScope.launch { dao.upsertDrink(editedDrink) }
+                viewModelScope.launch { drinkDao.upsertDrink(editedDrink) }
                 // clear dialog
                 clearDialogState()
             }
@@ -86,7 +88,7 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
             // deleting drink
             is DrinkEvent.deleteDrink -> {
                 viewModelScope.launch {
-                    dao.deleteDrink(event.drink)
+                    drinkDao.deleteDrink(event.drink)
                 }
             }
 
@@ -113,7 +115,7 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
                     amountInMl = amountInMl,
                     alcoholPercentage = alcoholPercentage
                 )
-                viewModelScope.launch { dao.upsertDrink(drink) }
+                viewModelScope.launch { drinkDao.upsertDrink(drink) }
                 // clear dialog
                 clearDialogState()
             }
@@ -165,6 +167,43 @@ class DrinkViewModel(private val dao: DrinkDao): ViewModel() {
     fun calculateBAC(): Float {
         // TODO implement BAC calculation logic
         return 15.5f
+    }
+
+    // loads user
+    fun loadUser() {
+        viewModelScope.launch {
+            val user = userDao.getUser()
+            _state.value = _state.value.copy(user = user)
+        }
+    }
+
+    // updates user information
+    fun updateUser(name: String, sex: String, weight: Float) {
+        viewModelScope.launch {
+            val existingUser = userDao.getUser()
+            val userId = existingUser?.id ?: 0 // TODO handle ids better
+            userDao.upsertUser(User(id = userId, name = name, sex = sex, weightKg = weight))
+            loadUser()
+        }
+    }
+
+    // returns current user
+    fun getUser(): User? {
+        var user: User? = null
+        viewModelScope.launch {
+            user = userDao.getUser()
+        }
+        return user
+    }
+
+    // sets default user
+    fun insertDefaultUser() {
+        viewModelScope.launch {
+            val existingUser = userDao.getUser()
+            if (existingUser == null) {
+                userDao.upsertUser(User(id = 1, name = "User", sex = "male", weightKg = 70f))
+            }
+        }
     }
 
     // validates if drink can be saved with the given values

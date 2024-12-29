@@ -1,6 +1,7 @@
 package com.example.drinkify.drinks
 
 import com.example.drinkify.core.models.Drink
+import com.example.drinkify.core.models.User
 
 data class DrinkState(
     val drinks: List<Drink> = emptyList(),
@@ -12,5 +13,6 @@ data class DrinkState(
     val isEditingDrink: Boolean = false,
     val selectedDrink: Drink? = null,
     val sortType: SortType = SortType.NAME,
-    val BAC: Float = 0f
+    val BAC: Float = 0f,
+    val user: User? = null
 )
