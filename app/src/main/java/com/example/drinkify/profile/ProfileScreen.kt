@@ -27,7 +27,7 @@ fun ProfileScreen(
         Text("Name")
         TextField(
             value = state.name,
-            onValueChange = { onEvent(ProfileEvent.updateName(it)) },
+            onValueChange = { onEvent(ProfileEvent.UpdateName(it)) },
             placeholder = { Text("Enter your name") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -36,7 +36,7 @@ fun ProfileScreen(
         Text("Sex")
         TextField(
             value = state.sex,
-            onValueChange = { onEvent(ProfileEvent.updateSex(it)) },
+            onValueChange = { onEvent(ProfileEvent.UpdateSex(it)) },
             placeholder = { Text("Enter your sex") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -47,7 +47,7 @@ fun ProfileScreen(
             value = state.weight.toString(),
             onValueChange = {
                 val weight = it.toFloatOrNull() ?: 0f
-                onEvent(ProfileEvent.updateWeight(weight))
+                onEvent(ProfileEvent.UpdateWeight(weight))
             },
             placeholder = { Text("Enter your weight") },
             modifier = Modifier.fillMaxWidth()
@@ -55,7 +55,7 @@ fun ProfileScreen(
 
         // save button
         Button(onClick = {
-            onEvent(ProfileEvent.saveProfile)
+            onEvent(ProfileEvent.SaveProfile)
         }) {
             Text("Save")
         }

@@ -31,22 +31,22 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
     fun onEvent(event: ProfileEvent) {
         when (event) {
             // name
-            is ProfileEvent.updateName -> {
+            is ProfileEvent.UpdateName -> {
                 _state.value = _state.value.copy(name = event.name)
             }
 
             // sex
-            is ProfileEvent.updateSex -> {
+            is ProfileEvent.UpdateSex -> {
                 _state.value = _state.value.copy(sex = event.sex)
             }
 
             // weight
-            is ProfileEvent.updateWeight -> {
+            is ProfileEvent.UpdateWeight -> {
                 _state.value = _state.value.copy(weight = event.weight)
             }
 
             // save profile
-            ProfileEvent.saveProfile -> {
+            ProfileEvent.SaveProfile -> {
                 val name = _state.value.name
                 val sex = _state.value.sex
                 val weight = _state.value.weight

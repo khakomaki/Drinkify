@@ -23,7 +23,7 @@ fun AddDrinkDialog(
     AlertDialog(
         modifier = modifier,
         onDismissRequest = {
-            onEvent(DrinkEvent.hideDialog)
+            onEvent(DrinkEvent.HideDialog)
         },
         title = {
             Text( if (state.isEditingDrink) "Edit drink" else "Add drink" )
@@ -36,7 +36,7 @@ fun AddDrinkDialog(
                 TextField(
                     value = state.name,
                     onValueChange = {
-                        onEvent(DrinkEvent.setName(it))
+                        onEvent(DrinkEvent.SetName(it))
                     },
                     placeholder = { Text(text = "Drink name") }
                 )
@@ -56,7 +56,7 @@ fun AddDrinkDialog(
                     TextField(
                         value = state.amountInMl.toString(),
                         onValueChange = {
-                            onEvent(DrinkEvent.setAmountMl(it.toIntOrNull() ?: 0))
+                            onEvent(DrinkEvent.SetAmountMl(it.toIntOrNull() ?: 0))
                         },
                         placeholder = { Text(text = "Consumed amount in ml") },
                         modifier = Modifier.weight(1f)
@@ -79,7 +79,7 @@ fun AddDrinkDialog(
                     TextField(
                         value = state.alcoholPercentage.toString(),
                         onValueChange = {
-                            onEvent(DrinkEvent.setAlcoholPercentage(it.toFloatOrNull() ?: 0f))
+                            onEvent(DrinkEvent.SetAlcoholPercentage(it.toFloatOrNull() ?: 0f))
                         },
                         placeholder = { Text(text = "Drink percentage") },
                         modifier = Modifier.weight(1f)
@@ -97,7 +97,7 @@ fun AddDrinkDialog(
         confirmButton = {
             Button(onClick = {
                 onEvent(
-                    if(state.isEditingDrink) DrinkEvent.saveEditedDrink else DrinkEvent.saveDrink
+                    if(state.isEditingDrink) DrinkEvent.SaveEditedDrink else DrinkEvent.SaveDrink
                 )
             }) {
                 Text( if(state.isEditingDrink) "Save changes" else "Save" )
@@ -105,7 +105,7 @@ fun AddDrinkDialog(
         },
         dismissButton = {
             Button(onClick = {
-                onEvent(DrinkEvent.hideDialog)
+                onEvent(DrinkEvent.HideDialog)
             }) {
                 Text(text = "Cancel")
             }

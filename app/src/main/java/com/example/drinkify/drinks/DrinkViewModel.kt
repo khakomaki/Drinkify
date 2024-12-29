@@ -1,6 +1,5 @@
 package com.example.drinkify.drinks
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drinkify.core.models.Drink
@@ -38,7 +37,7 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
     fun onEvent(event: DrinkEvent) {
         when(event) {
             // editing drink
-            is DrinkEvent.editDrink -> {
+            is DrinkEvent.EditDrink -> {
                 _state.update { it.copy(
                     isEditingDrink = true,
                     isAddingDrink = true,
@@ -50,7 +49,7 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
             }
 
             // saving edited drink
-            is DrinkEvent.saveEditedDrink -> {
+            is DrinkEvent.SaveEditedDrink -> {
                 // return immediately if no drink is selected
                 val selectedDrink = _state.value.selectedDrink ?: return
                 val editedDrink = selectedDrink.copy(
@@ -71,14 +70,14 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
             }
 
             // deleting drink
-            is DrinkEvent.deleteDrink -> {
+            is DrinkEvent.DeleteDrink -> {
                 viewModelScope.launch {
                     drinkDao.deleteDrink(event.drink)
                 }
             }
 
             // hiding dialog
-            is DrinkEvent.hideDialog -> {
+            is DrinkEvent.HideDialog -> {
                 _state.update { it.copy(
                     isAddingDrink = false,
                     isDeletingDrink = false,
@@ -89,7 +88,7 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
             }
 
             // saving new drink
-            is DrinkEvent.saveDrink -> {
+            is DrinkEvent.SaveDrink -> {
                 val name = _state.value.name
                 val amountInMl = _state.value.amountInMl
                 val alcoholPercentage = _state.value.alcoholPercentage
@@ -106,40 +105,40 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
             }
 
             // setting alcohol percentage
-            is DrinkEvent.setAlcoholPercentage -> {
+            is DrinkEvent.SetAlcoholPercentage -> {
                 _state.update { it.copy(
                     alcoholPercentage = event.alcoholPercentage
                 ) }
             }
 
             // setting amount
-            is DrinkEvent.setAmountMl -> {
+            is DrinkEvent.SetAmountMl -> {
                 _state.update { it.copy(
                     amountInMl = event.amountMl
                 ) }
             }
 
             // setting name
-            is DrinkEvent.setName -> {
+            is DrinkEvent.SetName -> {
                 _state.update { it.copy(
                     name = event.name
                 ) }
             }
 
             // showing drink dialog
-            is DrinkEvent.showDialog -> {
+            is DrinkEvent.ShowDialog -> {
                 _state.update { it.copy(
                     isAddingDrink = true
                 ) }
             }
 
             // sorting drinks
-            is DrinkEvent.sortDrinks -> {
+            is DrinkEvent.SortDrinks -> {
                 _sortType.value = event.sortType
             }
 
             // confirming drink deletion
-            is DrinkEvent.showDeleteConfirmation -> {
+            is DrinkEvent.ShowDeleteConfirmation -> {
                 _state.update { it.copy(
                     isDeletingDrink = true,
                     selectedDrink = event.drink

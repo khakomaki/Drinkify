@@ -12,6 +12,7 @@ import com.example.drinkify.drinks.DrinkViewModel
 import com.example.drinkify.navi.AppNavigation
 import com.example.drinkify.profile.ProfileViewModel
 
+@Suppress("UNCHECKED_CAST")
 class MainActivity : ComponentActivity() {
     private val db by lazy {
         Room.databaseBuilder(

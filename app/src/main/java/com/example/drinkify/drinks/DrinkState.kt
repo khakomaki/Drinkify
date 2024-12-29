@@ -1,7 +1,6 @@
 package com.example.drinkify.drinks
 
 import com.example.drinkify.core.models.Drink
-import com.example.drinkify.core.models.User
 
 data class DrinkState(
     val drinks: List<Drink> = emptyList(),

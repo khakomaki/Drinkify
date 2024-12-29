@@ -22,7 +22,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,7 +35,7 @@ fun DrinkScreen(
     Scaffold (
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                onEvent(DrinkEvent.showDialog)
+                onEvent(DrinkEvent.ShowDialog)
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -66,20 +65,20 @@ fun DrinkScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .horizontalScroll(rememberScrollState()),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = CenterVertically
                 ) {
-                    SortType.values().forEach { sortType ->
+                    SortType.entries.forEach { sortType ->
                         Row (
                             modifier = Modifier
                                 .clickable {
-                                    onEvent(DrinkEvent.sortDrinks(sortType))
+                                    onEvent(DrinkEvent.SortDrinks(sortType))
                                 },
                                 verticalAlignment = CenterVertically
                         ) {
                             RadioButton(
                                 selected = state.sortType == sortType,
                                 onClick = {
-                                    onEvent(DrinkEvent.sortDrinks(sortType))
+                                    onEvent(DrinkEvent.SortDrinks(sortType))
                                 }
                             )
                             Text(text = sortType.displayName)
@@ -111,7 +110,7 @@ fun DrinkScreen(
                     }
                     // edit button
                     IconButton(onClick = {
-                        onEvent(DrinkEvent.editDrink(drink))
+                        onEvent(DrinkEvent.EditDrink(drink))
                     }) {
                         Icon(
                             imageVector = Icons.Default.Edit,
@@ -121,7 +120,7 @@ fun DrinkScreen(
 
                     // deletion button
                     IconButton(onClick = {
-                        onEvent(DrinkEvent.showDeleteConfirmation(drink))
+                        onEvent(DrinkEvent.ShowDeleteConfirmation(drink))
                     }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
