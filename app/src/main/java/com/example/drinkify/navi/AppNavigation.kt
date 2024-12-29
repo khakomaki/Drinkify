@@ -10,36 +10,35 @@ import com.example.drinkify.drinks.DrinkScreen
 import com.example.drinkify.drinks.DrinkViewModel
 import com.example.drinkify.mainscreen.MainScreen
 import com.example.drinkify.profile.ProfileScreen
+import com.example.drinkify.profile.ProfileViewModel
 
 @Composable
-fun AppNavigation(viewModel: DrinkViewModel) {
-    val state by viewModel.state.collectAsState()
+fun AppNavigation(
+    drinkViewModel: DrinkViewModel,
+    profileViewModel: ProfileViewModel
+) {
+    val drinkState by drinkViewModel.state.collectAsState()
+    val profileState by profileViewModel.state.collectAsState()
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "main") {
         composable("main") {
             MainScreen(
-                BAC = state.BAC,
                 onNavigateToDrinks = { navController.navigate("drinks") },
                 onNavigateToProfile = { navController.navigate("profile") }
             )
         }
         composable("drinks") {
             DrinkScreen(
-                state = state,
-                onEvent = viewModel::onEvent
+                state = drinkState,
+                onEvent = drinkViewModel::onEvent
             )
         }
 
         composable("profile") {
             ProfileScreen(
-                name = state.user?.name ?: "",
-                sex = state.user?.sex ?: "",
-                weight = state.user?.weightKg ?: 0f,
-                onSave = { name, sex, weight ->
-                    viewModel.updateUser(name, sex, weight)
-                    navController.popBackStack()
-                }
+                state = profileState,
+                onEvent = profileViewModel::onEvent
             )
         }
     }

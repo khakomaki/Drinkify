@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun MainScreen(
-    BAC: Float,
     onNavigateToDrinks: () -> Unit,
     onNavigateToProfile: () -> Unit,
     modifier: Modifier = Modifier
@@ -26,7 +25,7 @@ fun MainScreen(
     ) {
         // BAC meter
         Text(
-            text = "BAC: ${"%.2f".format(BAC)}%",
+            text = "BAC: ${"%.2f".format(15.5)}%",
             style = MaterialTheme.typography.headlineLarge
         )
 

@@ -6,49 +6,46 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
-import com.example.drinkify.core.database.DrinkDatabase
+import com.example.drinkify.core.database.DrinkifyDatabase
 import com.example.drinkify.drinks.DrinkViewModel
 import com.example.drinkify.navi.AppNavigation
-import kotlinx.coroutines.launch
+import com.example.drinkify.profile.ProfileViewModel
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {
         Room.databaseBuilder(
             applicationContext,
-            DrinkDatabase::class.java,
+            DrinkifyDatabase::class.java,
             name = "drinkify.db"
         )
         .fallbackToDestructiveMigration()
         .build()
     }
 
-    private val viewModel: DrinkViewModel by viewModels {
+    private val drinkViewModel: DrinkViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return DrinkViewModel(db.drinkDao, db.userDao) as T
+                return DrinkViewModel(db.drinkDao) as T
+            }
+        }
+    }
+
+    private val profileViewModel: ProfileViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return ProfileViewModel(db.userDao) as T
             }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // default user
-        loadDefaultUser()
-
         setContent {
-            AppNavigation(viewModel = viewModel)
-        }
-    }
-
-    private fun loadDefaultUser() {
-        lifecycleScope.launch {
-            val existingUser = viewModel.getUser()
-            if (existingUser == null) {
-                viewModel.insertDefaultUser()
-            }
+            AppNavigation(
+                drinkViewModel = drinkViewModel,
+                profileViewModel = profileViewModel
+            )
         }
     }
 }

@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drinkify.core.models.Drink
 import com.example.drinkify.core.database.DrinkDao
-import com.example.drinkify.core.database.UserDao
-import com.example.drinkify.core.models.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -17,7 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DrinkViewModel(private val drinkDao: DrinkDao, private val userDao: UserDao): ViewModel() {
+class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
 
     private val _sortType = MutableStateFlow(SortType.NAME)
     private val _drinks = _sortType
@@ -36,19 +33,6 @@ class DrinkViewModel(private val drinkDao: DrinkDao, private val userDao: UserDa
             sortType = sortType
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000), DrinkState())
-
-    // update BAC counter
-    init {
-        viewModelScope.launch {
-            while(true) {
-                val updatedBAC = calculateBAC()
-                _state.update { currentState ->
-                    currentState.copy(BAC = updatedBAC)
-                }
-                delay(5000L) // update every 5s
-            }
-        }
-    }
 
     fun onEvent(event: DrinkEvent) {
         when(event) {
@@ -159,49 +143,6 @@ class DrinkViewModel(private val drinkDao: DrinkDao, private val userDao: UserDa
                     isDeletingDrink = true,
                     selectedDrink = event.drink
                 )}
-            }
-        }
-    }
-
-    // calculates blood alcohol content
-    fun calculateBAC(): Float {
-        // TODO implement BAC calculation logic
-        return 15.5f
-    }
-
-    // loads user
-    fun loadUser() {
-        viewModelScope.launch {
-            val user = userDao.getUser()
-            _state.value = _state.value.copy(user = user)
-        }
-    }
-
-    // updates user information
-    fun updateUser(name: String, sex: String, weight: Float) {
-        viewModelScope.launch {
-            val existingUser = userDao.getUser()
-            val userId = existingUser?.id ?: 0 // TODO handle ids better
-            userDao.upsertUser(User(id = userId, name = name, sex = sex, weightKg = weight))
-            loadUser()
-        }
-    }
-
-    // returns current user
-    fun getUser(): User? {
-        var user: User? = null
-        viewModelScope.launch {
-            user = userDao.getUser()
-        }
-        return user
-    }
-
-    // sets default user
-    fun insertDefaultUser() {
-        viewModelScope.launch {
-            val existingUser = userDao.getUser()
-            if (existingUser == null) {
-                userDao.upsertUser(User(id = 1, name = "User", sex = "male", weightKg = 70f))
             }
         }
     }

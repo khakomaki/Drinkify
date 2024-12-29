@@ -6,7 +6,7 @@ import com.example.drinkify.core.models.Drink
 import com.example.drinkify.core.models.User
 
 @Database(entities = [Drink::class, User::class], version = 3, exportSchema = false)
-abstract class DrinkDatabase : RoomDatabase() {
+abstract class DrinkifyDatabase : RoomDatabase() {
     abstract val drinkDao: DrinkDao
     abstract val userDao: UserDao
 }
