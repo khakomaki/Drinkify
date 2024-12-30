@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.example.drinkify.bac.BACViewModel
 import com.example.drinkify.consumed_drinks.ConsumedDrinkViewModel
 import com.example.drinkify.core.database.DrinkifyDatabase
 import com.example.drinkify.drinks.DrinkViewModel
@@ -49,13 +50,25 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private val bacViewModel: BACViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return BACViewModel(
+                    consumedDrinkDao = db.consumedDrinkDao,
+                    userDao = db.userDao
+                ) as T
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AppNavigation(
                 drinkViewModel = drinkViewModel,
                 profileViewModel = profileViewModel,
-                consumedDrinkViewModel = consumedDrinkViewModel
+                consumedDrinkViewModel = consumedDrinkViewModel,
+                bacViewModel = bacViewModel
             )
         }
     }

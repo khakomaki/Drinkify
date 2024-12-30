@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.drinkify.bac.BACViewModel
 import com.example.drinkify.consumed_drinks.AvailableDrinkScreen
 import com.example.drinkify.consumed_drinks.ConsumedDrinkHistoryScreen
 import com.example.drinkify.consumed_drinks.ConsumedDrinkViewModel
@@ -19,8 +20,10 @@ import com.example.drinkify.profile.ProfileViewModel
 fun AppNavigation(
     drinkViewModel: DrinkViewModel,
     profileViewModel: ProfileViewModel,
-    consumedDrinkViewModel: ConsumedDrinkViewModel
+    consumedDrinkViewModel: ConsumedDrinkViewModel,
+    bacViewModel: BACViewModel
 ) {
+    val bacState by bacViewModel.state.collectAsState()
     val drinkState by drinkViewModel.state.collectAsState()
     val profileState by profileViewModel.state.collectAsState()
     val consumedDrinkState by consumedDrinkViewModel.state.collectAsState()
@@ -29,6 +32,7 @@ fun AppNavigation(
     NavHost(navController = navController, startDestination = "main") {
         composable("main") {
             MainScreen(
+                bacState = bacState,
                 onNavigateToDrinks = { navController.navigate("drinks") },
                 onNavigateToProfile = { navController.navigate("profile") },
                 onNavigateToRecordDrink = { navController.navigate("record_drinks") },

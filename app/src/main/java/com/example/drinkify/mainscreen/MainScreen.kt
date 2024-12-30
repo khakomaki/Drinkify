@@ -5,15 +5,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.drinkify.bac.BACState
+import com.example.drinkify.ui.components.BACMeter
 
 @Composable
 fun MainScreen(
+    bacState: BACState,
     onNavigateToDrinks: () -> Unit,
     onNavigateToProfile: () -> Unit,
     onNavigateToRecordDrink: () -> Unit,
@@ -26,10 +28,7 @@ fun MainScreen(
         modifier = modifier.fillMaxWidth().padding(16.dp)
     ) {
         // BAC meter
-        Text(
-            text = "BAC: ${"%.2f".format(15.5)}%",
-            style = MaterialTheme.typography.headlineLarge
-        )
+        BACMeter(bac = bacState.bac)
 
         // Navigation
         Button(onClick = onNavigateToDrinks) {
