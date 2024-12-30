@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import java.text.DateFormat
 
 @Composable
 fun ConsumedDrinkHistoryScreen(
@@ -34,11 +35,19 @@ fun ConsumedDrinkHistoryScreen(
                         fontSize = 16.sp
                     )
                     Text(
-                        text = "Consumed: ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm".format(consumedDrink.timestamp))}",
+                        text = "Consumed: ${formatTimestamp(consumedDrink.timestamp)}",
                         fontSize = 12.sp
                     )
                 }
             }
         }
     }
+}
+
+fun formatTimestamp(timestamp: Long): String {
+    val formatter = DateFormat.getDateTimeInstance(
+        DateFormat.MEDIUM,
+        DateFormat.SHORT
+    )
+    return formatter.format(timestamp)
 }
