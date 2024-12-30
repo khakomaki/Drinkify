@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.example.drinkify.consumed_drinks.ConsumedDrinkViewModel
 import com.example.drinkify.core.database.DrinkifyDatabase
 import com.example.drinkify.drinks.DrinkViewModel
 import com.example.drinkify.navi.AppNavigation
@@ -22,6 +23,14 @@ class MainActivity : ComponentActivity() {
         )
         .fallbackToDestructiveMigration()
         .build()
+    }
+
+    private val consumedDrinkViewModel: ConsumedDrinkViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return ConsumedDrinkViewModel(db.consumedDrinkDao) as T
+            }
+        }
     }
 
     private val drinkViewModel: DrinkViewModel by viewModels {
@@ -45,7 +54,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppNavigation(
                 drinkViewModel = drinkViewModel,
-                profileViewModel = profileViewModel
+                profileViewModel = profileViewModel,
+                consumedDrinkViewModel = consumedDrinkViewModel
             )
         }
     }

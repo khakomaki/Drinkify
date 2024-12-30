@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 fun MainScreen(
     onNavigateToDrinks: () -> Unit,
     onNavigateToProfile: () -> Unit,
+    onNavigateToRecordDrink: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -35,6 +36,9 @@ fun MainScreen(
         }
         Button(onClick = onNavigateToProfile) {
             Text("Profile")
+        }
+        Button(onClick = onNavigateToRecordDrink) {
+            Text("Record Drinks")
         }
     }
 }

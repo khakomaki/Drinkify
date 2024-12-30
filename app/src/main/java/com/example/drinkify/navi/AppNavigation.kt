@@ -6,6 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.drinkify.consumed_drinks.AvailableDrinkScreen
+import com.example.drinkify.consumed_drinks.ConsumedDrinkViewModel
 import com.example.drinkify.drinks.DrinkScreen
 import com.example.drinkify.drinks.DrinkViewModel
 import com.example.drinkify.mainscreen.MainScreen
@@ -15,17 +17,20 @@ import com.example.drinkify.profile.ProfileViewModel
 @Composable
 fun AppNavigation(
     drinkViewModel: DrinkViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    consumedDrinkViewModel: ConsumedDrinkViewModel
 ) {
     val drinkState by drinkViewModel.state.collectAsState()
     val profileState by profileViewModel.state.collectAsState()
+    val consumedDrinkState by consumedDrinkViewModel.state.collectAsState()
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "main") {
         composable("main") {
             MainScreen(
                 onNavigateToDrinks = { navController.navigate("drinks") },
-                onNavigateToProfile = { navController.navigate("profile") }
+                onNavigateToProfile = { navController.navigate("profile") },
+                onNavigateToRecordDrink = { navController.navigate("record_drinks") }
             )
         }
         composable("drinks") {
@@ -39,6 +44,14 @@ fun AppNavigation(
             ProfileScreen(
                 state = profileState,
                 onEvent = profileViewModel::onEvent
+            )
+        }
+
+        composable("record_drinks") {
+            AvailableDrinkScreen(
+                consumedDrinkState = consumedDrinkState,
+                drinkState = drinkState,
+                onEvent = consumedDrinkViewModel::onEvent
             )
         }
     }
