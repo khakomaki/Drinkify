@@ -17,6 +17,7 @@ fun MainScreen(
     onNavigateToDrinks: () -> Unit,
     onNavigateToProfile: () -> Unit,
     onNavigateToRecordDrink: () -> Unit,
+    onNavigateToDrinkHistory: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -39,6 +40,9 @@ fun MainScreen(
         }
         Button(onClick = onNavigateToRecordDrink) {
             Text("Record Drinks")
+        }
+        Button(onClick = onNavigateToDrinkHistory) {
+            Text("Drink History")
         }
     }
 }

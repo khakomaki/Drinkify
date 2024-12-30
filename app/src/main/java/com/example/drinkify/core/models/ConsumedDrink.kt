@@ -30,3 +30,13 @@ data class ConsumedDrink(
     val drinkId: Int,
     val timestamp: Long
 )
+
+data class ConsumedDrinkAdvanced(
+    val id: Int,
+    val userId: Int,
+    val timestamp: Long,
+    val drinkId: Int,
+    val drinkName: String,
+    val drinkAmountInMl: Int,
+    val drinkAlcoholPercentage: Float
+)

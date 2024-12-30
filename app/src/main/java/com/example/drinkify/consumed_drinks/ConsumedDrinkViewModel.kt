@@ -17,6 +17,14 @@ class ConsumedDrinkViewModel(private val consumedDrinkDao: ConsumedDrinkDao): Vi
         ConsumedDrinkState()
     )
 
+    init {
+        viewModelScope.launch {
+            consumedDrinkDao.getConsumedDrinksAdvanced(userId = 0).collect { drinks ->
+                _state.value = _state.value.copy(consumedDrinksAdvanced = drinks)
+            }
+        }
+    }
+
     fun onEvent(event: ConsumedDrinkEvent) {
         when(event) {
             // setting time of consumption

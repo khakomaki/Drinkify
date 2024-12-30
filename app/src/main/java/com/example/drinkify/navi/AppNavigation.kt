@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.drinkify.consumed_drinks.AvailableDrinkScreen
+import com.example.drinkify.consumed_drinks.ConsumedDrinkHistoryScreen
 import com.example.drinkify.consumed_drinks.ConsumedDrinkViewModel
 import com.example.drinkify.drinks.DrinkScreen
 import com.example.drinkify.drinks.DrinkViewModel
@@ -30,7 +31,8 @@ fun AppNavigation(
             MainScreen(
                 onNavigateToDrinks = { navController.navigate("drinks") },
                 onNavigateToProfile = { navController.navigate("profile") },
-                onNavigateToRecordDrink = { navController.navigate("record_drinks") }
+                onNavigateToRecordDrink = { navController.navigate("record_drinks") },
+                onNavigateToDrinkHistory = { navController.navigate("drink_history")}
             )
         }
         composable("drinks") {
@@ -51,6 +53,13 @@ fun AppNavigation(
             AvailableDrinkScreen(
                 consumedDrinkState = consumedDrinkState,
                 drinkState = drinkState,
+                onEvent = consumedDrinkViewModel::onEvent
+            )
+        }
+
+        composable("drink_history") {
+            ConsumedDrinkHistoryScreen(
+                consumedDrinkState = consumedDrinkState,
                 onEvent = consumedDrinkViewModel::onEvent
             )
         }
