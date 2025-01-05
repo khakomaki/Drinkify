@@ -20,19 +20,25 @@ class BACViewModel(
 
     init {
         viewModelScope.launch {
-            combine(
-                userDao.getUserFlow(),
+            userDao.getUserFlow().combine(
                 consumedDrinkDao.getConsumedDrinksAdvanced(0)
             ) { user, drinks ->
-                val bac = BACCalculator.calculateBAC(
-                    consumedDrinks = drinks,
-                    weightKg = user.weightKg,
-                    isMale = true // TODO figure out gender policy
-                )
-                BACState(bac = bac)
+                // null check before calculating
+                if (user != null) {
+                    val bac = BACCalculator.calculateBAC(
+                        consumedDrinks = drinks,
+                        weightKg = user.weightKg,
+                        isMale = true  // TODO figure out gender policy
+                    )
+                    BACState(bac = bac)
+                } else {
+                    // default BAC if user is null
+                    BACState(bac = 0.0)
+                }
             }.collect { updatedState ->
                 _state.value = updatedState
             }
         }
     }
 }
+

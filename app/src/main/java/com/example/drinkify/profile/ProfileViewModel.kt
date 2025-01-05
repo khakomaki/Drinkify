@@ -20,12 +20,33 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
     private fun loadProfile() {
         viewModelScope.launch {
             val user = userDao.getUser()
-            _state.value = _state.value.copy(
-                name = user?.name ?: "",
-                sex = user?.sex ?: "",
-                weight = user?.weightKg ?: 0f
-            )
+            if (user == null) {
+                // handle default user scenario
+                createDefaultUser()
+            } else {
+                // existing user
+                _state.value = _state.value.copy(
+                    name = user.name,
+                    sex = user.sex,
+                    weight = user.weightKg
+                )
+            }
         }
+    }
+
+    private suspend fun createDefaultUser() {
+        val defaultUser = User(
+            id = 0,
+            name = "User",
+            sex = "Male",
+            weightKg = 70f
+        )
+        userDao.upsertUser(defaultUser)
+        _state.value = _state.value.copy(
+            name = defaultUser.name,
+            sex = defaultUser.sex,
+            weight = defaultUser.weightKg
+        )
     }
 
     fun onEvent(event: ProfileEvent) {
