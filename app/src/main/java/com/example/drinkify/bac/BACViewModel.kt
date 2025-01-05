@@ -30,8 +30,8 @@ class BACViewModel(
     private fun startBACUpdates() {
         viewModelScope.launch {
             while (true) {
-                timeFlow.value = System.currentTimeMillis() // Emit current time
-                delay(updateIntervalMs) // Delay for 1 minute
+                timeFlow.value = System.currentTimeMillis()
+                delay(updateIntervalMs)
             }
         }
 

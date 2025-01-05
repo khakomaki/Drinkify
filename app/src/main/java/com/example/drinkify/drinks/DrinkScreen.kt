@@ -26,13 +26,21 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.drinkify.ui.components.BasicTopBar
 
 @Composable
 fun DrinkScreen(
     state: DrinkState,
-    onEvent: (DrinkEvent) -> Unit
+    onEvent: (DrinkEvent) -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     Scaffold (
+        topBar = {
+            BasicTopBar(
+                title = "Edit Drinks",
+                onNavigateBack = onNavigateBack
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 onEvent(DrinkEvent.ShowDialog)

@@ -42,14 +42,16 @@ fun AppNavigation(
         composable("drinks") {
             DrinkScreen(
                 state = drinkState,
-                onEvent = drinkViewModel::onEvent
+                onEvent = drinkViewModel::onEvent,
+                onNavigateBack = { navController.navigate("main") }
             )
         }
 
         composable("profile") {
             ProfileScreen(
                 state = profileState,
-                onEvent = profileViewModel::onEvent
+                onEvent = profileViewModel::onEvent,
+                onNavigateBack = { navController.navigate("main") }
             )
         }
 
@@ -57,14 +59,16 @@ fun AppNavigation(
             AvailableDrinkScreen(
                 consumedDrinkState = consumedDrinkState,
                 drinkState = drinkState,
-                onEvent = consumedDrinkViewModel::onEvent
+                onEvent = consumedDrinkViewModel::onEvent,
+                onNavigateBack = { navController.navigate("main") }
             )
         }
 
         composable("drink_history") {
             ConsumedDrinkHistoryScreen(
                 consumedDrinkState = consumedDrinkState,
-                onEvent = consumedDrinkViewModel::onEvent
+                onEvent = consumedDrinkViewModel::onEvent,
+                onNavigateBack = { navController.navigate("main") }
             )
         }
     }
