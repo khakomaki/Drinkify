@@ -27,7 +27,7 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
                 // existing user
                 _state.value = _state.value.copy(
                     name = user.name,
-                    sex = user.sex,
+                    gender = user.gender,
                     weight = user.weightKg
                 )
             }
@@ -38,13 +38,13 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
         val defaultUser = User(
             id = 0,
             name = "User",
-            sex = "Male",
+            gender = Gender.MALE,
             weightKg = 70f
         )
         userDao.upsertUser(defaultUser)
         _state.value = _state.value.copy(
             name = defaultUser.name,
-            sex = defaultUser.sex,
+            gender = Gender.MALE,
             weight = defaultUser.weightKg
         )
     }
@@ -57,8 +57,8 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
             }
 
             // sex
-            is ProfileEvent.UpdateSex -> {
-                _state.value = _state.value.copy(sex = event.sex)
+            is ProfileEvent.UpdateGender -> {
+                _state.value = _state.value.copy(gender = event.gender)
             }
 
             // weight
@@ -69,14 +69,14 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
             // save profile
             ProfileEvent.SaveProfile -> {
                 val name = _state.value.name
-                val sex = _state.value.sex
+                val gender = _state.value.gender
                 val weight = _state.value.weight
                 // validate profile
-                if (!isProfileValid(name, sex, weight)) return
+                if (!isProfileValid(name, weight)) return
                 val user = User(
                     id = 0,
                     name = name,
-                    sex = sex,
+                    gender = gender,
                     weightKg = weight
                 )
                 viewModelScope.launch { userDao.upsertUser(user) }
@@ -84,8 +84,17 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
         }
     }
 
-    private fun isProfileValid(name: String, sex: String, weight: Float): Boolean {
-        // TODO implement validation logic
+    private fun isProfileValid(name: String, weight: Float): Boolean {
+        // name
+        if (name.isBlank()) {
+            return false
+        }
+
+        // weight
+        if (weight <= 0) {
+            return false
+        }
+
         return true
     }
 }

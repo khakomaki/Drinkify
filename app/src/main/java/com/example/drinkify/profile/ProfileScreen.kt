@@ -2,13 +2,16 @@ package com.example.drinkify.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -32,15 +35,6 @@ fun ProfileScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // sex
-        Text("Sex")
-        TextField(
-            value = state.sex,
-            onValueChange = { onEvent(ProfileEvent.UpdateSex(it)) },
-            placeholder = { Text("Enter your sex") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
         // weight
         Text("Weight (kg)")
         TextField(
@@ -52,6 +46,22 @@ fun ProfileScreen(
             placeholder = { Text("Enter your weight") },
             modifier = Modifier.fillMaxWidth()
         )
+
+        // gender
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Gender.entries.forEach { gender ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = state.gender == gender,
+                        onClick = { onEvent(ProfileEvent.UpdateGender(gender)) }
+                    )
+                    Text(gender.toUIVersion())
+                }
+            }
+        }
 
         // save button
         Button(onClick = {
