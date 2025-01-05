@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 @Composable
 fun BACMeter(bac: Double) {
     Text(
-        text = "BAC: ${"%.2f".format(bac)}",
+        text = "BAC: ${"%.3f".format(bac)}",
         style = MaterialTheme.typography.headlineLarge
     )
 }
