@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drinkify.core.database.ConsumedDrinkDao
 import com.example.drinkify.core.database.UserDao
+import com.example.drinkify.profile.Gender
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +29,7 @@ class BACViewModel(
                     val bac = BACCalculator.calculateBAC(
                         consumedDrinks = drinks,
                         weightKg = user.weightKg,
-                        isMale = true  // TODO figure out gender policy
+                        isMale = user.gender == Gender.MALE
                     )
                     BACState(bac = bac)
                 } else {
