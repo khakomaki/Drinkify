@@ -10,10 +10,6 @@ interface ConsumedDrinkDao {
     @Upsert
     suspend fun upsertConsumedDrink(consumedDrink: ConsumedDrink)
 
-    // all consumed drinks
-    @Query("SELECT * FROM consumed_drink_table WHERE userId = :userId ORDER BY timestamp DESC")
-    fun getConsumedDrinksByUser(userId: Int): Flow<List<ConsumedDrink>>
-
     // all consumed drinks with drink information
     @Query("SELECT * FROM consumed_drink_table WHERE userId = :userId ORDER BY timestamp DESC")
     @Transaction

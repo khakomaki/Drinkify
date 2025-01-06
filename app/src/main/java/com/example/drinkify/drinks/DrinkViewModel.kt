@@ -78,12 +78,6 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
 
             // hiding dialog
             is DrinkEvent.HideDialog -> {
-                _state.update { it.copy(
-                    isAddingDrink = false,
-                    isDeletingDrink = false,
-                    isEditingDrink = false,
-                    selectedDrink = null
-                ) }
                 clearDialogState()
             }
 
@@ -173,7 +167,8 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
             isDeletingDrink = false,
             name = "",
             amountInMl = 0,
-            alcoholPercentage = 0f
+            alcoholPercentage = 0f,
+            selectedDrink = null
         )}
     }
 }

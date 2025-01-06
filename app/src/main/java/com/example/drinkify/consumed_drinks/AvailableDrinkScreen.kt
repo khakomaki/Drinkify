@@ -42,7 +42,7 @@ fun AvailableDrinkScreen(
                 ) {
                     // drink information
                     Column(
-                        modifier = Modifier.weight(2f)
+                        modifier = Modifier.weight(1f)
                     ) {
                         Text(
                             text = drink.name,
