@@ -44,7 +44,7 @@ class ConsumedDrinkViewModel(private val consumedDrinkDao: ConsumedDrinkDao): Vi
                 // validation
                 if (selectedDrink == null) return
                 val consumedDrink = ConsumedDrink(
-                    userId = 0,
+                    userId = 0, // TODO change when multi-user support is added
                     drinkId = selectedDrink.id,
                     timestamp = time
                 )

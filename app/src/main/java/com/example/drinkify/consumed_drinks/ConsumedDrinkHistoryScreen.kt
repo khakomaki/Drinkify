@@ -34,19 +34,21 @@ fun ConsumedDrinkHistoryScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = padding
         ) {
-            items(consumedDrinkState.consumedDrinksAdvanced) { consumedDrink ->
+            items(consumedDrinkState.consumedDrinksAdvanced) { consumedDrinkAdvanced ->
+                val drink = consumedDrinkAdvanced.drink
+                val consumedDrink = consumedDrinkAdvanced.consumedDrink
                 Row {
                     Column {
                         Text(
-                            text = consumedDrink.drinkName,
+                            text = drink.name,
                             fontSize = 20.sp
                         )
                         Text(
-                            text = "${consumedDrink.drinkAmountInMl}ml",
+                            text = "${drink.amountInMl}ml",
                             fontSize = 16.sp
                         )
                         Text(
-                            text = "${consumedDrink.drinkAlcoholPercentage}%",
+                            text = "${drink.alcoholPercentage}%",
                             fontSize = 16.sp
                         )
                         Text(

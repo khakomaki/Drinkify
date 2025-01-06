@@ -1,8 +1,10 @@
 package com.example.drinkify.core.models
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @Entity(
     tableName = "consumed_drink_table",
@@ -32,11 +34,11 @@ data class ConsumedDrink(
 )
 
 data class ConsumedDrinkAdvanced(
-    val id: Int,
-    val userId: Int,
-    val timestamp: Long,
-    val drinkId: Int,
-    val drinkName: String,
-    val drinkAmountInMl: Int,
-    val drinkAlcoholPercentage: Float
+    @Embedded
+    val consumedDrink: ConsumedDrink,
+    @Relation(
+        parentColumn = "drinkId",
+        entityColumn = "id"
+    )
+    val drink: Drink
 )

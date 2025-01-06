@@ -57,7 +57,6 @@ fun AppNavigation(
 
         composable("record_drinks") {
             AvailableDrinkScreen(
-                consumedDrinkState = consumedDrinkState,
                 drinkState = drinkState,
                 onEvent = consumedDrinkViewModel::onEvent,
                 onNavigateBack = { navController.navigate("main") }
