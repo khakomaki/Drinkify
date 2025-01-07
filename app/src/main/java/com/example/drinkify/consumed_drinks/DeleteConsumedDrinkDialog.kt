@@ -16,7 +16,8 @@ fun DeleteConsumedDrinkDialog(
     AlertDialog(
         onDismissRequest = { onEvent(ConsumedDrinkEvent.HideDialog ) },
         title = { Text("Confirm deletion") },
-        text = { Text("Do you want to delete record of drinking\"${consumedDrink.drinkId}\"?") },
+        // TODO add drink name
+        text = { Text("Do you want to delete record of drinking?") },
         confirmButton = {
             TextButton(onClick = {
                 onEvent(ConsumedDrinkEvent.DeleteConsumedDrink(consumedDrink))
