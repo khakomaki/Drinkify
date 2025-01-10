@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Liquor
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
@@ -70,12 +72,12 @@ fun MainScreen(
             )
             NavigationButton(
                 text = "Record Drink",
-                icon = Icons.Default.Add,
+                icon = Icons.Default.Liquor,
                 onClick = onNavigateToRecordDrink
             )
             NavigationButton(
                 text = "Drink History",
-                icon = Icons.Default.Menu,
+                icon = Icons.Filled.History,
                 onClick = onNavigateToDrinkHistory
             )
         }
