@@ -59,13 +59,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Room database
-    implementation("androidx.room:room-runtime:2.6.1")
+    implementation(libs.androidx.room.runtime)
     kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.androidx.room.ktx)
 
     // testing Room
-    testImplementation("androidx.room:room-testing:2.6.1")
+    testImplementation(libs.androidx.room.testing)
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(libs.kotlinx.coroutines.android)
 }
