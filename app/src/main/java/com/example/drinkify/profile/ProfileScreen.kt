@@ -26,7 +26,7 @@ fun ProfileScreen(
         modifier = Modifier.padding(16.dp)
     ) {
         BasicTopBar(
-            title = " Edit Profile",
+            title = "Edit Profile",
             onNavigateBack = onNavigateBack
         )
 

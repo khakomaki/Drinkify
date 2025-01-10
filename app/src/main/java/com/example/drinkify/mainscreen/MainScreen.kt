@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.drinkify.bac.BACState
 import com.example.drinkify.ui.components.BACMeter
+import com.example.drinkify.ui.components.MainTopBar
 
 @Composable
 fun MainScreen(
@@ -26,6 +27,13 @@ fun MainScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+        // main top bar
+        topBar = {
+            MainTopBar(
+                onNavigateToProfile = onNavigateToProfile
+            )
+        },
+
         // BAC Meter
         bottomBar = {
             BottomAppBar(
@@ -54,9 +62,6 @@ fun MainScreen(
             // Navigation
             Button(onClick = onNavigateToDrinks) {
                 Text("Drinks")
-            }
-            Button(onClick = onNavigateToProfile) {
-                Text("Profile")
             }
             Button(onClick = onNavigateToRecordDrink) {
                 Text("Record Drinks")
