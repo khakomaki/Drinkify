@@ -68,4 +68,7 @@ dependencies {
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+
+    // icons
+    implementation(libs.androidx.material.icons.extended)
 }
