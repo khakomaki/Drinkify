@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.drinkify.bac.BACState
 import com.example.drinkify.ui.components.BACMeter
 import com.example.drinkify.ui.components.MainTopBar
+import com.example.drinkify.ui.components.NavigationButton
 
 @Composable
 fun MainScreen(
@@ -60,15 +63,21 @@ fun MainScreen(
                 .padding(16.dp)
         ) {
             // Navigation
-            Button(onClick = onNavigateToDrinks) {
-                Text("Drinks")
-            }
-            Button(onClick = onNavigateToRecordDrink) {
-                Text("Record Drinks")
-            }
-            Button(onClick = onNavigateToDrinkHistory) {
-                Text("Drink History")
-            }
+            NavigationButton(
+                text = "Drinks",
+                icon = Icons.Default.Edit,
+                onClick = onNavigateToDrinks
+            )
+            NavigationButton(
+                text = "Record Drink",
+                icon = Icons.Default.Add,
+                onClick = onNavigateToRecordDrink
+            )
+            NavigationButton(
+                text = "Drink History",
+                icon = Icons.Default.Menu,
+                onClick = onNavigateToDrinkHistory
+            )
         }
     }
 }
