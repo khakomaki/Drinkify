@@ -60,3 +60,16 @@ Where:
 ### Localization
 
 Promille (per mille, ‰) is optionally used to represent BAC in certain countries.
+
+## Credits
+
+Default Drink images have been provided by [flaticon](https://www.flaticon.com/).
+
+Images:
+
+- Beer designed by **monkik**
+- Coctail designed by **Freepik**
+- Jägermeister designed by **Freepik**
+- Liquor designed by **Freepik**
+- Whiskey designed by **Freepik**
+- Wine designed by **Freepik**
