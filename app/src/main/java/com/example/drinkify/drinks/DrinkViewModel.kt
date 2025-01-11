@@ -44,7 +44,8 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
                     selectedDrink = event.drink,
                     name = event.drink.name,
                     amountInMl = event.drink.amountInMl,
-                    alcoholPercentage = event.drink.alcoholPercentage
+                    alcoholPercentage = event.drink.alcoholPercentage,
+                    imagePath = event.drink.imagePath
                 )}
             }
 
@@ -55,7 +56,8 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
                 val editedDrink = selectedDrink.copy(
                     name = _state.value.name,
                     amountInMl = _state.value.amountInMl,
-                    alcoholPercentage = _state.value.alcoholPercentage
+                    alcoholPercentage = _state.value.alcoholPercentage,
+                    imagePath = _state.value.imagePath
                 )
                 // validate drink
                 if(!isDrinkValid(
@@ -86,16 +88,24 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
                 val name = _state.value.name
                 val amountInMl = _state.value.amountInMl
                 val alcoholPercentage = _state.value.alcoholPercentage
+                val imagePath = _state.value.imagePath
                 // validate drink
                 if(!isDrinkValid(name, amountInMl, alcoholPercentage)) return
                 val drink = Drink(
                     name = name,
                     amountInMl = amountInMl,
-                    alcoholPercentage = alcoholPercentage
+                    alcoholPercentage = alcoholPercentage,
+                    imagePath = imagePath
                 )
                 viewModelScope.launch { drinkDao.upsertDrink(drink) }
                 // clear dialog
                 clearDialogState()
+            }
+
+            is DrinkEvent.SetImage -> {
+                _state.update { it.copy(
+                    imagePath = event.imagePath
+                ) }
             }
 
             // setting alcohol percentage
@@ -170,5 +180,9 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
             alcoholPercentage = 0f,
             selectedDrink = null
         )}
+    }
+
+    private fun uploadImageToStorate() {
+        return
     }
 }

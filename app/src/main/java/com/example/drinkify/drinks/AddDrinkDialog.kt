@@ -1,9 +1,16 @@
 package com.example.drinkify.drinks
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -12,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.drinkify.default_images.DefaultImages
 
 @Composable
 fun AddDrinkDialog(
@@ -91,6 +100,35 @@ fun AddDrinkDialog(
                     Text(text = "Enter a valid percentage", color = Color.Red)
                 } else {
                     Text(text = "", color = Color.Transparent)
+                }
+
+                // image
+                Text(text = "Image")
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(DefaultImages.entries) { image ->
+                        Image(
+                            painter = painterResource(id = image.resId),
+                            contentDescription = image.name,
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clickable {
+                                    onEvent(DrinkEvent.SetImage(image.path))
+                                }
+                                .border(
+                                    BorderStroke(
+                                        2.dp,
+                                        // visual indication for selected image
+                                        if (state.imagePath == image.path) {
+                                            Color.Blue
+                                        } else {
+                                            Color.Transparent
+                                        }
+                                    ),
+                                )
+                        )
+                    }
                 }
             }
         },

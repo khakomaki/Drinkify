@@ -15,5 +15,6 @@ sealed interface DrinkEvent {
     data class SetName(val name: String): DrinkEvent
     data class SetAmountMl(val amountMl: Int): DrinkEvent
     data class SetAlcoholPercentage(val alcoholPercentage: Float): DrinkEvent
+    data class SetImage(val imagePath: String): DrinkEvent
     data class SortDrinks(val sortType: SortType): DrinkEvent
 }

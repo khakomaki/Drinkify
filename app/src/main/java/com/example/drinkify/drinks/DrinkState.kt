@@ -11,5 +11,6 @@ data class DrinkState(
     val isDeletingDrink: Boolean = false,
     val isEditingDrink: Boolean = false,
     val selectedDrink: Drink? = null,
-    val sortType: SortType = SortType.NAME
+    val sortType: SortType = SortType.NAME,
+    val imagePath: String? = null
 )

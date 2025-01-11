@@ -9,5 +9,6 @@ data class Drink(
     val id: Int = 0,
     val name: String,
     val amountInMl: Int,
-    val alcoholPercentage: Float
+    val alcoholPercentage: Float,
+    val imagePath: String? = null
 )
