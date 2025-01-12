@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drinkify.core.models.Drink
 import com.example.drinkify.core.database.DrinkDao
+import com.example.drinkify.images.DrinkImages
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -45,7 +46,7 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
                     name = event.drink.name,
                     amountInMl = event.drink.amountInMl,
                     alcoholPercentage = event.drink.alcoholPercentage,
-                    imagePath = event.drink.imagePath
+                    imageResId = event.drink.imageResId
                 )}
             }
 
@@ -57,7 +58,7 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
                     name = _state.value.name,
                     amountInMl = _state.value.amountInMl,
                     alcoholPercentage = _state.value.alcoholPercentage,
-                    imagePath = _state.value.imagePath
+                    imageResId = _state.value.imageResId
                 )
                 // validate drink
                 if(!isDrinkValid(
@@ -88,14 +89,14 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
                 val name = _state.value.name
                 val amountInMl = _state.value.amountInMl
                 val alcoholPercentage = _state.value.alcoholPercentage
-                val imagePath = _state.value.imagePath
+                val imagePath = _state.value.imageResId
                 // validate drink
                 if(!isDrinkValid(name, amountInMl, alcoholPercentage)) return
                 val drink = Drink(
                     name = name,
                     amountInMl = amountInMl,
                     alcoholPercentage = alcoholPercentage,
-                    imagePath = imagePath
+                    imageResId = imagePath
                 )
                 viewModelScope.launch { drinkDao.upsertDrink(drink) }
                 // clear dialog
@@ -104,7 +105,7 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
 
             is DrinkEvent.SetImage -> {
                 _state.update { it.copy(
-                    imagePath = event.imagePath
+                    imageResId = event.imageResId
                 ) }
             }
 
@@ -178,11 +179,8 @@ class DrinkViewModel(private val drinkDao: DrinkDao): ViewModel() {
             name = "",
             amountInMl = 0,
             alcoholPercentage = 0f,
-            selectedDrink = null
+            selectedDrink = null,
+            imageResId = DrinkImages.PLACEHOLDER.resId
         )}
-    }
-
-    private fun uploadImageToStorate() {
-        return
     }
 }

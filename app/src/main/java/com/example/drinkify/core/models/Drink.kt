@@ -2,6 +2,7 @@ package com.example.drinkify.core.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.drinkify.images.DrinkImages
 
 @Entity(tableName = "drink_table")
 data class Drink(
@@ -10,5 +11,5 @@ data class Drink(
     val name: String,
     val amountInMl: Int,
     val alcoholPercentage: Float,
-    val imagePath: String? = null
+    val imageResId: Int = DrinkImages.PLACEHOLDER.resId
 )

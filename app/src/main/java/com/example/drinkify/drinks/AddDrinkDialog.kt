@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -20,8 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.drinkify.default_images.DefaultImages
+import com.example.drinkify.images.DrinkImages
 
 @Composable
 fun AddDrinkDialog(
@@ -56,71 +58,91 @@ fun AddDrinkDialog(
                     Text(text = "", color = Color.Transparent)
                 }
 
-                // amount
+                // amount, alcohol percentage and image
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(0.5f)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    TextField(
-                        value = state.amountInMl.toString(),
-                        onValueChange = {
-                            onEvent(DrinkEvent.SetAmountMl(it.toIntOrNull() ?: 0))
-                        },
-                        placeholder = { Text(text = "Consumed amount in ml") },
+                    // amount and alcohol percentage
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.weight(1f)
+                    ) {
+                        // amount
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextField(
+                                value = state.amountInMl.toString(),
+                                onValueChange = {
+                                    onEvent(DrinkEvent.SetAmountMl(it.toIntOrNull() ?: 0))
+                                },
+                                placeholder = { Text(text = "Consumed amount in ml") },
+                                modifier = Modifier.weight(1f),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            )
+                            Text(text = "ml")
+                        }
+                        // live validation for amount
+                        if(state.amountInMl <= 0) {
+                            Text(text = "Enter a number greater than 0", color = Color.Red)
+                        } else {
+                            Text(text = "", color = Color.Transparent)
+                        }
+
+                        // alcohol percentage
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextField(
+                                value = state.alcoholPercentage.toString(),
+                                onValueChange = {
+                                    onEvent(DrinkEvent.SetAlcoholPercentage(it.toFloatOrNull() ?: 0f))
+                                },
+                                placeholder = { Text(text = "Drink percentage") },
+                                modifier = Modifier.weight(1f),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            )
+                            Text(text = "%")
+                        }
+                        // live validation for percentage
+                        if(state.alcoholPercentage < 0 || 100 < state.alcoholPercentage) {
+                            Text(text = "Enter a valid percentage", color = Color.Red)
+                        } else {
+                            Text(text = "", color = Color.Transparent)
+                        }
+                    }
+
+                    // current drink image
+                    Image(
+                        painter = painterResource(id = state.imageResId),
+                        contentDescription = "Drink image",
+                        modifier = Modifier.size(100.dp)
                     )
-                    Text(text = "ml")
-                }
-                // live validation for amount
-                if(state.amountInMl <= 0) {
-                    Text(text = "Enter a number greater than 0", color = Color.Red)
-                } else {
-                    Text(text = "", color = Color.Transparent)
                 }
 
-                // alcohol percentage
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(0.5f)
-                ) {
-                    TextField(
-                        value = state.alcoholPercentage.toString(),
-                        onValueChange = {
-                            onEvent(DrinkEvent.SetAlcoholPercentage(it.toFloatOrNull() ?: 0f))
-                        },
-                        placeholder = { Text(text = "Drink percentage") },
-                        modifier = Modifier.weight(1f)
-                    )
-                    Text(text = "%")
-                }
-                // live validation for percentage
-                if(state.alcoholPercentage < 0 || 100 < state.alcoholPercentage) {
-                    Text(text = "Enter a valid percentage", color = Color.Red)
-                } else {
-                    Text(text = "", color = Color.Transparent)
-                }
-
-                // image
+                // image selection
                 Text(text = "Image")
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    items(DefaultImages.entries) { image ->
+                    items(DrinkImages.entries) { image ->
                         Image(
                             painter = painterResource(id = image.resId),
                             contentDescription = image.name,
                             modifier = Modifier
                                 .size(100.dp)
                                 .clickable {
-                                    onEvent(DrinkEvent.SetImage(image.path))
+                                    onEvent(DrinkEvent.SetImage(image.resId))
                                 }
                                 .border(
                                     BorderStroke(
                                         2.dp,
                                         // visual indication for selected image
-                                        if (state.imagePath == image.path) {
+                                        if (state.imageResId == image.resId) {
                                             Color.Blue
                                         } else {
                                             Color.Transparent

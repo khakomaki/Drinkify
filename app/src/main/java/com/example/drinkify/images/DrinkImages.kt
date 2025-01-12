@@ -1,8 +1,8 @@
-package com.example.drinkify.default_images
+package com.example.drinkify.images
 
 import com.example.drinkify.R
 
-enum class DefaultImages(val resId: Int, val path: String) {
+enum class DrinkImages(val resId: Int, val path: String) {
     PLACEHOLDER(R.drawable.placeholder, "placeholder.png"),
     BEER(R.drawable.beer, "beer.png}"),
     COCKTAIL(R.drawable.cocktail, "cocktail.png"),
