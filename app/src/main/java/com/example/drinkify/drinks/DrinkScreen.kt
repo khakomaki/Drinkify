@@ -1,5 +1,6 @@
 package com.example.drinkify.drinks
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -24,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.drinkify.ui.components.BasicTopBar
@@ -100,6 +103,17 @@ fun DrinkScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    // drink image
+                    Column(
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = drink.imageResId),
+                            contentDescription = "Drink image",
+                            modifier = Modifier.size(50.dp)
+                        )
+                    }
+
                     Column(
                         modifier = Modifier.weight(1f)
                     ) {
@@ -109,11 +123,11 @@ fun DrinkScreen(
                         )
                         Text(
                             text = "${drink.amountInMl}ml",
-                            fontSize = 12.sp
+                            fontSize = 14.sp
                         )
                         Text(
                             text = "${drink.alcoholPercentage}%",
-                            fontSize = 12.sp
+                            fontSize = 14.sp
                         )
                     }
                     // edit button

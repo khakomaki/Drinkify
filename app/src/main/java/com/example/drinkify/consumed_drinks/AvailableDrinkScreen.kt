@@ -1,10 +1,12 @@
 package com.example.drinkify.consumed_drinks
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -12,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.drinkify.drinks.DrinkState
@@ -40,6 +43,17 @@ fun AvailableDrinkScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    // drink image
+                    Column(
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = drink.imageResId),
+                            contentDescription = "Drink image",
+                            modifier = Modifier.size(50.dp)
+                        )
+                    }
+
                     // drink information
                     Column(
                         modifier = Modifier.weight(1f)
@@ -50,11 +64,11 @@ fun AvailableDrinkScreen(
                         )
                         Text(
                             text = "${drink.amountInMl}ml",
-                            fontSize = 12.sp
+                            fontSize = 14.sp
                         )
                         Text(
                             text = "${drink.alcoholPercentage}%",
-                            fontSize = 12.sp
+                            fontSize = 14.sp
                         )
                     }
 
