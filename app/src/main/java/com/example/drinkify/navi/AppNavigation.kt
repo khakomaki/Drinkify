@@ -43,7 +43,7 @@ fun AppNavigation(
             DrinkScreen(
                 state = drinkState,
                 onEvent = drinkViewModel::onEvent,
-                onNavigateBack = { navController.navigate("main") }
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
@@ -52,7 +52,7 @@ fun AppNavigation(
                 state = profileState,
                 onEvent = profileViewModel::onEvent,
                 viewModel = profileViewModel,
-                onNavigateBack = { navController.navigate("main") }
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
@@ -60,7 +60,7 @@ fun AppNavigation(
             AvailableDrinkScreen(
                 drinkState = drinkState,
                 onEvent = consumedDrinkViewModel::onEvent,
-                onNavigateBack = { navController.navigate("main") }
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
@@ -68,7 +68,7 @@ fun AppNavigation(
             ConsumedDrinkHistoryScreen(
                 consumedDrinkState = consumedDrinkState,
                 onEvent = consumedDrinkViewModel::onEvent,
-                onNavigateBack = { navController.navigate("main") }
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }

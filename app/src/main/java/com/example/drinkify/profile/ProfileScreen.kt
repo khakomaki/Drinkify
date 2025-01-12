@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -13,6 +14,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,12 +32,22 @@ fun ProfileScreen(
     onNavigateBack: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val isModified = viewModel.isModified()
+    val isValid = viewModel.isProfileValid()
+
+    // return state on dispose
+    DisposableEffect(Unit) {
+        onDispose { viewModel.resetState() }
+    }
 
     Scaffold(
         topBar = {
             BasicTopBar(
                 title = "Edit Profile",
-                onNavigateBack = onNavigateBack
+                onNavigateBack = {
+                    onNavigateBack()
+                    viewModel.resetState()
+                }
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -81,6 +93,23 @@ fun ProfileScreen(
                     }
                 }
             }
+
+            // info message about save state
+            val infoMessage = when {
+                !isValid -> "Please ensure all fields are filled correctly"
+                isModified -> "Unsaved changes"
+                else -> "All saved!"
+            }
+            Text(
+                text = infoMessage,
+                style = MaterialTheme.typography.bodySmall,
+                // red for errors
+                color = if (!isValid) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onBackground
+                }
+            )
 
             // save button
             Button(

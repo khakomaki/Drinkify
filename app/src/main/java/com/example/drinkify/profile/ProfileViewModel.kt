@@ -57,31 +57,21 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
         initialState = _state.value
     }
 
-    private fun isModified(): Boolean {
-        return _state.value != initialState
-    }
-
     fun onEvent(event: ProfileEvent) {
         when (event) {
             // name
             is ProfileEvent.UpdateName -> {
-                _state.value = _state.value.copy(
-                    name = event.name
-                )
+                _state.value = _state.value.copy(name = event.name)
             }
 
             // sex
             is ProfileEvent.UpdateGender -> {
-                _state.value = _state.value.copy(
-                    gender = event.gender
-                )
+                _state.value = _state.value.copy(gender = event.gender)
             }
 
             // weight
             is ProfileEvent.UpdateWeight -> {
-                _state.value = _state.value.copy(
-                    weight = event.weight
-                )
+                _state.value = _state.value.copy(weight = event.weight)
             }
 
             // save profile
@@ -105,20 +95,21 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
         }
     }
 
-    fun isProfileSaveValid(): Boolean {
-        val currentState = _state.value
-        return isModified() && isProfileValid(currentState.name, currentState.weight)
+    fun isModified(): Boolean {
+        return _state.value != initialState
     }
 
-    private fun isProfileValid(name: String, weight: Float): Boolean {
-        // name
-        if (name.isBlank()) {
-            return false
-        }
-        // weight
-        if (weight <= 0) {
-            return false
-        }
+    fun isProfileValid(): Boolean {
+        if (_state.value.name.isBlank()) return false    // name
+        if (_state.value.weight <= 0) return false       // weight
         return true
+    }
+
+    fun isProfileSaveValid(): Boolean {
+        return isModified() && isProfileValid()
+    }
+
+    fun resetState() {
+        _state.value = initialState!!
     }
 }
