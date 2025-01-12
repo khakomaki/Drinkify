@@ -13,6 +13,9 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
     private val _state = MutableStateFlow(ProfileState())
     val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), ProfileState())
 
+    // state for managing changes
+    private var initialState: ProfileState? = null
+
     init {
         loadProfile()
     }
@@ -20,16 +23,18 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
     private fun loadProfile() {
         viewModelScope.launch {
             val user = userDao.getUser()
+            // create default or use existing
             if (user == null) {
-                // handle default user scenario
                 createDefaultUser()
             } else {
-                // existing user
+                // update state
                 _state.value = _state.value.copy(
                     name = user.name,
                     gender = user.gender,
                     weight = user.weightKg
                 )
+                // update initial state
+                initialState = _state.value
             }
         }
     }
@@ -41,47 +46,68 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
             gender = Gender.MALE,
             weightKg = 70f
         )
+        // insert default user
         userDao.upsertUser(defaultUser)
         _state.value = _state.value.copy(
             name = defaultUser.name,
             gender = Gender.MALE,
             weight = defaultUser.weightKg
         )
+        // update initial state
+        initialState = _state.value
+    }
+
+    private fun isModified(): Boolean {
+        return _state.value != initialState
     }
 
     fun onEvent(event: ProfileEvent) {
         when (event) {
             // name
             is ProfileEvent.UpdateName -> {
-                _state.value = _state.value.copy(name = event.name)
+                _state.value = _state.value.copy(
+                    name = event.name
+                )
             }
 
             // sex
             is ProfileEvent.UpdateGender -> {
-                _state.value = _state.value.copy(gender = event.gender)
+                _state.value = _state.value.copy(
+                    gender = event.gender
+                )
             }
 
             // weight
             is ProfileEvent.UpdateWeight -> {
-                _state.value = _state.value.copy(weight = event.weight)
+                _state.value = _state.value.copy(
+                    weight = event.weight
+                )
             }
 
             // save profile
             ProfileEvent.SaveProfile -> {
+                if (!isProfileSaveValid()) return
                 val name = _state.value.name
                 val gender = _state.value.gender
                 val weight = _state.value.weight
-                // validate profile
-                if (!isProfileValid(name, weight)) return
                 val user = User(
                     id = 0,
                     name = name,
                     gender = gender,
                     weightKg = weight
                 )
-                viewModelScope.launch { userDao.upsertUser(user) }
+                viewModelScope.launch {
+                    userDao.upsertUser(user)
+                    // update initial state
+                    initialState = _state.value
+                }
             }
         }
+    }
+
+    fun isProfileSaveValid(): Boolean {
+        val currentState = _state.value
+        return isModified() && isProfileValid(currentState.name, currentState.weight)
     }
 
     private fun isProfileValid(name: String, weight: Float): Boolean {
@@ -89,12 +115,10 @@ class ProfileViewModel(private val userDao: UserDao): ViewModel() {
         if (name.isBlank()) {
             return false
         }
-
         // weight
         if (weight <= 0) {
             return false
         }
-
         return true
     }
 }

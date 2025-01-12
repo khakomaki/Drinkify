@@ -51,6 +51,7 @@ fun AppNavigation(
             ProfileScreen(
                 state = profileState,
                 onEvent = profileViewModel::onEvent,
+                viewModel = profileViewModel,
                 onNavigateBack = { navController.navigate("main") }
             )
         }
