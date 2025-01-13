@@ -6,11 +6,15 @@ The estimated Blood Alcohol Content (_BAC_) is calculated in real time.
 
 ## Usage
 
+<img src="example/main.png" height="540">
+
 Drinkify allows users to create, record and track consumed Drinks.
 
 Recorded Drinks can be viewed in history.
 
 ### Create custom Drink
+
+<img src="example/edit_drinks.png" height="540">
 
 Created drinks can be tracked as consumed.
 
@@ -21,6 +25,8 @@ Created drinks can be tracked as consumed.
 
 ### Edit Profile
 
+<img src="example/edit_profile.png" height="540">
+
 Profile settings are used to calculate the BAC.
 
 1. Navigate to _Profile_
@@ -29,11 +35,19 @@ Profile settings are used to calculate the BAC.
 
 ### Record consumed Drink
 
+<img src="example/record_drinks.png" height="540">
+
 Recording a consumed Drink adds it to history and updates the BAC.
 
 1. Navigate to _Record Drink_
 2. Find desired Drink
 3. Click _Drink_
+
+### Drink History
+
+<img src="example/drink_history.png" height="540">
+
+Recorded Drink consumptions can be checked on history page.
 
 ## BAC
 
