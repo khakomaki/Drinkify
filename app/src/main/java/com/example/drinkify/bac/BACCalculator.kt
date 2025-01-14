@@ -28,6 +28,11 @@ object BACCalculator {
             val drink = consumedDrinkAdvanced.drink
             val consumedDrink = consumedDrinkAdvanced.consumedDrink
 
+            // skip drinks in the future
+            if (currentTime < consumedDrink.timestamp) {
+                return@sumOf 0.0
+            }
+
             val timeElapsedHours = (currentTime - consumedDrink.timestamp) / (HOUR_IN_MS)
             val alcoholGrams = drink.amountInMl * (drink.alcoholPercentage / 100) * ALCOHOL_DENSITY
             val bacForDrink = (alcoholGrams / (weightGrams * alcoholDistributionRatio)) * 100

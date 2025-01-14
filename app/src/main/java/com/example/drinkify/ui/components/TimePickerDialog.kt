@@ -7,17 +7,21 @@ import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.Locale
 
 @SuppressLint("NewApi")
@@ -60,6 +64,20 @@ fun DrinkTimePickerDialog(
         )
     }
 
+    val currentTime = System.currentTimeMillis()
+    val timeDifference = currentTime - calendar.timeInMillis
+
+    val recordTimeMessage = remember(selectedTime.value) {
+        // future record
+        if (timeDifference < 0) {
+            val duration = Duration.ofMillis(-timeDifference)
+            "In ${duration.toHours()} hours, ${duration.toMinutes() % 60} minutes"
+        } else {
+            val duration = Duration.ofMillis(timeDifference)
+            "${duration.toHours()} hours, ${duration.toMinutes() % 60} minutes ago"
+        }
+    }
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {Text(drinkName) },
@@ -86,6 +104,13 @@ fun DrinkTimePickerDialog(
                     }
                     Text(SimpleDateFormat("HH:mm", Locale.getDefault()).format(selectedTime.value))
                 }
+
+                // record time message
+                Text(
+                    text = recordTimeMessage,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(8.dp)
+                )
             }
         },
         confirmButton = {
