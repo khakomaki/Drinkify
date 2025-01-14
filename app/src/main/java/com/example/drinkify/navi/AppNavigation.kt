@@ -59,6 +59,7 @@ fun AppNavigation(
         composable("record_drinks") {
             AvailableDrinkScreen(
                 drinkState = drinkState,
+                consumedDrinkState = consumedDrinkState,
                 onEvent = consumedDrinkViewModel::onEvent,
                 onNavigateBack = { navController.popBackStack() }
             )

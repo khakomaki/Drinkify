@@ -43,9 +43,7 @@ fun MainScreen(
                 modifier = Modifier.padding(bottom = 32.dp)
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                        //.padding(vertical = 16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
                     BACMeter(bac = bacState.bac)

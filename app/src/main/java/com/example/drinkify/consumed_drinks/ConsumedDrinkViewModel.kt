@@ -76,11 +76,21 @@ class ConsumedDrinkViewModel(private val consumedDrinkDao: ConsumedDrinkDao): Vi
             }
 
             // hiding dialog
-            ConsumedDrinkEvent.HideDialog -> {
+            is ConsumedDrinkEvent.HideDialog -> {
                 _state.update { it.copy(
                     isDeletingConsumedDrink = false,
                     selectedConsumedDrink = null
                 ) }
+            }
+
+            // showing time picker
+            is ConsumedDrinkEvent.ShowTimePicker -> {
+                _state.update { it.copy(isPickingTime = true) }
+            }
+
+            // hiding time picker
+            is ConsumedDrinkEvent.HideTimePicker -> {
+                _state.update { it.copy(isPickingTime = false) }
             }
         }
     }

@@ -6,6 +6,8 @@ import com.example.drinkify.core.models.Drink
 sealed interface ConsumedDrinkEvent {
     data object SaveConsumedDrink: ConsumedDrinkEvent
     data object HideDialog: ConsumedDrinkEvent
+    data object ShowTimePicker: ConsumedDrinkEvent
+    data object HideTimePicker: ConsumedDrinkEvent
 
     data class ShowDeleteConfirmation(val consumedDrink: ConsumedDrink): ConsumedDrinkEvent
 

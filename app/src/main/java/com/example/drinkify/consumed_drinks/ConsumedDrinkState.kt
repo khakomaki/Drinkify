@@ -10,5 +10,6 @@ data class ConsumedDrinkState(
 
     val selectedDrink: Drink? = null,
     val selectedConsumedDrink: ConsumedDrink? = null,
-    val isDeletingConsumedDrink: Boolean = false
+    val isDeletingConsumedDrink: Boolean = false,
+    val isPickingTime: Boolean = false
 )
