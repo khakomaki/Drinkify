@@ -22,6 +22,13 @@ import androidx.room.Relation
             childColumns = ["userId"],
             // ensure deletion if user gets deleted
             onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = DrinkSession::class,
+            parentColumns = ["id"],
+            childColumns = ["sessionId"],
+            // ensure deletion if session gets deleted
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )
@@ -30,6 +37,7 @@ data class ConsumedDrink(
     val id: Int = 0,
     val userId: Int,
     val drinkId: Int,
+    val sessionId: Int,
     val timestamp: Long
 )
 

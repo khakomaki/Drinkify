@@ -30,7 +30,10 @@ class MainActivity : ComponentActivity() {
     private val consumedDrinkViewModel: ConsumedDrinkViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ConsumedDrinkViewModel(db.consumedDrinkDao) as T
+                return ConsumedDrinkViewModel(
+                    db.consumedDrinkDao,
+                    db.drinkSessionDao
+                ) as T
             }
         }
     }

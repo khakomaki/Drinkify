@@ -1,6 +1,7 @@
 package com.example.drinkify.bac
 
 import com.example.drinkify.core.models.ConsumedDrinkAdvanced
+import com.example.drinkify.core.models.Drink
 
 object BACCalculator {
     // avoid using integers to ensure precision
@@ -16,7 +17,7 @@ object BACCalculator {
         isMale: Boolean
     ): Double {
         val currentTime = System.currentTimeMillis()
-        val weightGrams = weightKg * 1000
+        val weightGrams = weightKg * 1000.0
         val alcoholDistributionRatio = if (isMale) {
             VOL_DISTRIBUTION_MALE
         } else {
@@ -34,8 +35,8 @@ object BACCalculator {
             }
 
             val timeElapsedHours = (currentTime - consumedDrink.timestamp) / (HOUR_IN_MS)
-            val alcoholGrams = drink.amountInMl * (drink.alcoholPercentage / 100) * ALCOHOL_DENSITY
-            val bacForDrink = (alcoholGrams / (weightGrams * alcoholDistributionRatio)) * 100
+            val alcoholGrams = drink.amountInMl * (drink.alcoholPercentage / 100.0) * ALCOHOL_DENSITY
+            val bacForDrink = (alcoholGrams / (weightGrams * alcoholDistributionRatio)) * 100.0
 
             // reduce by metabolized alcohol
             (bacForDrink - (timeElapsedHours * METABOLISM_RATE)).coerceAtLeast(0.0)
@@ -43,13 +44,28 @@ object BACCalculator {
         return totalBAC
     }
 
-    fun calculateAlcoholGrams(
-        consumedDrinks: List<ConsumedDrinkAdvanced>
-    ): Double {
-        val totalAlcohol = consumedDrinks.sumOf { consumedDrinkAdvanced ->
-            val drink = consumedDrinkAdvanced.drink
-            drink.amountInMl * (drink.alcoholPercentage / 100) * ALCOHOL_DENSITY
+    fun effectLast(
+        drink: Drink,
+        consumptionTime: Long,
+        weightKg: Float,
+        isMale: Boolean
+    ): Long {
+        val weightGrams = weightKg * 1000.0
+        val alcoholDistributionRatio = if (isMale) {
+            VOL_DISTRIBUTION_MALE
+        } else {
+            VOL_DISTRIBUTION_FEMALE
         }
-        return totalAlcohol
+
+        // calculate alcohol to be metabolized
+        val alcoholGrams = drink.amountInMl * (drink.alcoholPercentage / 100.0) * ALCOHOL_DENSITY
+        val bacForDrink = (alcoholGrams / (weightGrams * alcoholDistributionRatio)) * 100.0
+
+        // calculate time to metabolize
+        val timeToMetabolizeHours = bacForDrink / METABOLISM_RATE
+
+        // add effect time to consumption time
+        val effectEnd = consumptionTime + (timeToMetabolizeHours * HOUR_IN_MS).toLong()
+        return effectEnd
     }
 }
