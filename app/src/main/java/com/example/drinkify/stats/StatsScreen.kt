@@ -96,14 +96,14 @@ fun StatsScreen(
             }
 
             // most consumed drink
-            state.mostConsumedDrink?.let { drink ->
-                Text(
-                    text = "Most Consumed Drink",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
+            Text(
+                text = "Most Consumed Drink",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 8.dp)
+            )
 
+            state.mostConsumedDrink?.let { drink ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -142,10 +142,24 @@ fun StatsScreen(
                         )
                     }
                 }
-            } ?: Text(
-                text = "No drinks have been consumed yet.",
-                fontSize = 20.sp
-            )
+            } ?: Row(   // no consumed drinks
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = MaterialTheme.shapes.medium
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text(
+                        text = "No drinks have been consumed yet",
+                        fontSize = 20.sp
+                    )
+                }
+            }
         }
     }
 }

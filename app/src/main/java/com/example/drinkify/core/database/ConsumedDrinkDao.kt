@@ -24,17 +24,17 @@ interface ConsumedDrinkDao {
         FROM consumed_drink_table
         WHERE userId = :userId
         ORDER BY timestamp DESC
-        """)
+    """)
     @Transaction
     fun getConsumedDrinksAdvanced(userId: Int): Flow<List<ConsumedDrinkAdvanced>>
 
     // total consumed alcohol for user
     @Query("""
-        SELECT SUM(drink.alcoholPercentage)
+        SELECT COALESCE(SUM(drink.alcoholPercentage), 0.0)
         FROM consumed_drink_table
         JOIN drink_table AS drink ON consumed_drink_table.drinkId = drink.id
         WHERE consumed_drink_table.userId = :userId
-        """)
+    """)
     fun getTotalConsumedAlcohol(userId: Int): Flow<Double>
 
     // most consumed drink for user
