@@ -15,18 +15,22 @@ import com.example.drinkify.drinks.DrinkViewModel
 import com.example.drinkify.mainscreen.MainScreen
 import com.example.drinkify.profile.ProfileScreen
 import com.example.drinkify.profile.ProfileViewModel
+import com.example.drinkify.stats.StatsScreen
+import com.example.drinkify.stats.StatsViewModel
 
 @Composable
 fun AppNavigation(
     drinkViewModel: DrinkViewModel,
     profileViewModel: ProfileViewModel,
     consumedDrinkViewModel: ConsumedDrinkViewModel,
-    bacViewModel: BACViewModel
+    bacViewModel: BACViewModel,
+    statsViewModel: StatsViewModel
 ) {
     val bacState by bacViewModel.state.collectAsState()
     val drinkState by drinkViewModel.state.collectAsState()
     val profileState by profileViewModel.state.collectAsState()
     val consumedDrinkState by consumedDrinkViewModel.state.collectAsState()
+    val statsState by statsViewModel.state.collectAsState()
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "main") {
@@ -36,7 +40,8 @@ fun AppNavigation(
                 onNavigateToDrinks = { navController.navigate("drinks") },
                 onNavigateToProfile = { navController.navigate("profile") },
                 onNavigateToRecordDrink = { navController.navigate("record_drinks") },
-                onNavigateToDrinkHistory = { navController.navigate("drink_history")}
+                onNavigateToDrinkHistory = { navController.navigate("drink_history")},
+                onNavigateToStats = { navController.navigate("drink_stats") }
             )
         }
         composable("drinks") {
@@ -69,6 +74,13 @@ fun AppNavigation(
             ConsumedDrinkHistoryScreen(
                 consumedDrinkState = consumedDrinkState,
                 onEvent = consumedDrinkViewModel::onEvent,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable("drink_stats") {
+            StatsScreen(
+                state = statsState,
                 onNavigateBack = { navController.popBackStack() }
             )
         }

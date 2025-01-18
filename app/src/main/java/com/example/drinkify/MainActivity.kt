@@ -13,6 +13,7 @@ import com.example.drinkify.core.database.DrinkifyDatabase
 import com.example.drinkify.drinks.DrinkViewModel
 import com.example.drinkify.navi.AppNavigation
 import com.example.drinkify.profile.ProfileViewModel
+import com.example.drinkify.stats.StatsViewModel
 
 @Suppress("UNCHECKED_CAST")
 class MainActivity : ComponentActivity() {
@@ -61,6 +62,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private val statsViewModel: StatsViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return StatsViewModel(db.consumedDrinkDao) as T
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -68,7 +77,8 @@ class MainActivity : ComponentActivity() {
                 drinkViewModel = drinkViewModel,
                 profileViewModel = profileViewModel,
                 consumedDrinkViewModel = consumedDrinkViewModel,
-                bacViewModel = bacViewModel
+                bacViewModel = bacViewModel,
+                statsViewModel = statsViewModel
             )
         }
     }

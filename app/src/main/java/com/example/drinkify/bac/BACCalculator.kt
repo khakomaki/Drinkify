@@ -24,7 +24,7 @@ object BACCalculator {
         }
 
         // effect on BAC by every consumed drink
-        val totalAlcohol = consumedDrinks.sumOf { consumedDrinkAdvanced ->
+        val totalBAC = consumedDrinks.sumOf { consumedDrinkAdvanced ->
             val drink = consumedDrinkAdvanced.drink
             val consumedDrink = consumedDrinkAdvanced.consumedDrink
 
@@ -39,6 +39,16 @@ object BACCalculator {
 
             // reduce by metabolized alcohol
             (bacForDrink - (timeElapsedHours * METABOLISM_RATE)).coerceAtLeast(0.0)
+        }
+        return totalBAC
+    }
+
+    fun calculateAlcoholGrams(
+        consumedDrinks: List<ConsumedDrinkAdvanced>
+    ): Double {
+        val totalAlcohol = consumedDrinks.sumOf { consumedDrinkAdvanced ->
+            val drink = consumedDrinkAdvanced.drink
+            drink.amountInMl * (drink.alcoholPercentage / 100) * ALCOHOL_DENSITY
         }
         return totalAlcohol
     }

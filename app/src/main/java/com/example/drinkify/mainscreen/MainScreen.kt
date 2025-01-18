@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Liquor
+import androidx.compose.material.icons.filled.StackedBarChart
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ fun MainScreen(
     onNavigateToProfile: () -> Unit,
     onNavigateToRecordDrink: () -> Unit,
     onNavigateToDrinkHistory: () -> Unit,
+    onNavigateToStats: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -75,6 +77,11 @@ fun MainScreen(
                 text = "Drink History",
                 icon = Icons.Filled.History,
                 onClick = onNavigateToDrinkHistory
+            )
+            NavigationButton(
+                text = "Stats",
+                icon = Icons.Default.StackedBarChart,
+                onClick = onNavigateToStats
             )
         }
     }
