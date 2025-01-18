@@ -44,121 +44,64 @@ fun StatsScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             // total drink count
-            Text(
-                text = "Total Drink Count",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = MaterialTheme.shapes.medium
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Text(
-                        text = state.totalDrinkCount.toString(),
-                        fontSize = 20.sp
-                    )
-                }
+            StatItem(title = "Total Drink Count") {
+                Text(
+                    text = state.totalDrinkCount.toString(),
+                    fontSize = 20.sp
+                )
             }
 
             // total consumed alcohol
-            Text(
-                text = "Total Consumed Alcohol",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = MaterialTheme.shapes.medium
-                    ),
-                verticalAlignment = Alignment.CenterVertically
+            StatItem(
+                title = "Total Consumed Alcohol"
             ) {
-                Column(
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Text(
-                        text = state.totalConsumedAlcohol.toString(),
-                        fontSize = 20.sp
-                    )
-                }
+                Text(
+                    text = "${state.totalConsumedAlcohol}ml",
+                    fontSize = 20.sp
+                )
             }
 
             // most consumed drink
-            Text(
-                text = "Most Consumed Drink",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-
-            state.mostConsumedDrink?.let { drink ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            shape = MaterialTheme.shapes.medium
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // drink image
-                    Column(
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = drink.imageResId),
-                            contentDescription = "Drink image",
-                            modifier = Modifier.size(50.dp)
-                        )
-                    }
-
-                    // drink information
-                    Column(
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            text = drink.name,
-                            fontSize = 20.sp
-                        )
-                        Text(
-                            text = "${drink.amountInMl}ml",
-                            fontSize = 14.sp
-                        )
-                        Text(
-                            text = "${drink.alcoholPercentage}%",
-                            fontSize = 14.sp
-                        )
-                    }
-                }
-            } ?: Row(   // no consumed drinks
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = MaterialTheme.shapes.medium
-                    ),
-                verticalAlignment = Alignment.CenterVertically
+            StatItem(
+                title = "Most Consumed Drink"
             ) {
-                Column(
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Text(
-                        text = "No drinks have been consumed yet",
-                        fontSize = 20.sp
-                    )
-                }
+                state.mostConsumedDrink?.let { drink ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // drink image
+                        Column(
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = drink.imageResId),
+                                contentDescription = "Drink image",
+                                modifier = Modifier.size(50.dp)
+                            )
+                        }
+
+                        // drink information
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = drink.name,
+                                fontSize = 20.sp
+                            )
+                            Text(
+                                text = "${drink.amountInMl}ml",
+                                fontSize = 14.sp
+                            )
+                            Text(
+                                text = "${drink.alcoholPercentage}%",
+                                fontSize = 14.sp
+                            )
+                        }
+                    }
+                } ?: Text(
+                    text = "No drinks have been consumed yet",
+                    fontSize = 20.sp
+                )
             }
         }
     }
