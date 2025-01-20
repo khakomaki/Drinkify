@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.max
+import kotlin.math.min
 
 class ConsumedDrinkViewModel(
     private val consumedDrinkDao: ConsumedDrinkDao,
@@ -50,48 +52,7 @@ class ConsumedDrinkViewModel(
             }
 
             // saving consumed drink
-            is ConsumedDrinkEvent.SaveConsumedDrink -> {
-                val selectedDrink = _state.value.selectedDrink
-                val time = _state.value.drinkTime
-                val userId = 0 // TODO change when multi-user support is added
-                // validation
-                if (selectedDrink == null) return
-                // session selection
-                val effectEnd = BACCalculator.effectLast(
-                    drink = selectedDrink,
-                    consumptionTime = time,
-                    weightKg = 80f, // TODO get correct weight
-                    isMale = true   // TODO get correct gender
-                )
-                viewModelScope.launch {
-                    val session = drinkSessionDao.getDrinkSession(
-                        userId = userId,
-                        effectStartTime = time,
-                        effectEndTime = effectEnd
-                    )
-                    val sessionId: Int
-                    if (session == null) {
-                        val newDrinkSession = createDrinkSession(
-                            userId = userId,
-                            startTimestamp = time,
-                            endTimestamp = effectEnd
-                        )
-                        sessionId = newDrinkSession.id
-                    } else {
-                        sessionId = session.id
-                    }
-
-                    val consumedDrink = ConsumedDrink(
-                        userId = userId,
-                        drinkId = selectedDrink.id,
-                        timestamp = time,
-                        sessionId = sessionId
-                    )
-                    // upsert
-                    consumedDrinkDao.upsertConsumedDrink(consumedDrink)
-                }
-                // update session start or end if necessary
-            }
+            is ConsumedDrinkEvent.SaveConsumedDrink -> handleSaveConsumedDrink()
 
             // showing deletion confirmation for consumed drink
             is ConsumedDrinkEvent.ShowDeleteConfirmation -> {
@@ -128,14 +89,53 @@ class ConsumedDrinkViewModel(
         }
     }
 
-    private suspend fun createDrinkSession(userId: Int, startTimestamp: Long, endTimestamp: Long): DrinkSession {
-        val newDrinkSession = DrinkSession(
-            userId = userId,
-            startTimestamp = startTimestamp,
-            endTimeStamp = endTimestamp
-        )
-        val sessionId = drinkSessionDao.upsertDrinkSession(newDrinkSession)
-        val insertedDrinkSession = drinkSessionDao.getDrinkSessionById(sessionId)
-        return insertedDrinkSession ?: newDrinkSession
+    private fun handleSaveConsumedDrink() {
+        // return immediately if no drink is selected
+        val selectedDrink = _state.value.selectedDrink ?: return
+        val time = _state.value.drinkTime
+        val userId = 0 // TODO change when multi-user support is added
+        viewModelScope.launch {
+            val effectEnd = BACCalculator.effectLast(
+                drink = selectedDrink,
+                consumptionTime = time,
+                weightKg = 80f, // TODO get correct weight
+                isMale = true   // TODO get correct gender
+            )
+            val session = addToDrinkSession(userId, time, effectEnd)
+            val consumedDrink = ConsumedDrink(
+                userId = userId,
+                drinkId = selectedDrink.id,
+                timestamp = time,
+                sessionId = session.id
+            )
+            // upsert
+            consumedDrinkDao.upsertConsumedDrink(consumedDrink)
+        }
+    }
+
+    private suspend fun addToDrinkSession(userId: Int, startTimestamp: Long, endTimestamp: Long): DrinkSession {
+        val existingSession = drinkSessionDao.getDrinkSession(userId, startTimestamp, endTimestamp)
+
+        // return existing or create new
+        return if (existingSession != null) {
+            val drinkSession = DrinkSession(
+                id = existingSession.id,
+                userId = existingSession.userId,
+                name = existingSession.name,
+                // merge timestamps
+                startTimestamp = min(existingSession.startTimestamp, startTimestamp),
+                endTimeStamp = max(existingSession.endTimeStamp, endTimestamp)
+            )
+            drinkSessionDao.upsertDrinkSession(drinkSession)
+            drinkSession
+        } else {
+            val newDrinkSession = DrinkSession(
+                userId = userId,
+                startTimestamp = startTimestamp,
+                endTimeStamp = endTimestamp
+            )
+            val sessionId = drinkSessionDao.upsertDrinkSession(newDrinkSession)
+            drinkSessionDao.getDrinkSessionById(sessionId) ?: newDrinkSession
+        }
     }
 }
