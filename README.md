@@ -87,3 +87,17 @@ Images:
 - Liquor designed by **Freepik**
 - Whiskey designed by **Freepik**
 - Wine designed by **Freepik**
+
+## TODO
+
+The application is currently being updated. Following updates are expected in the near future:
+
+- **Favorites**
+- Grouping Drink consumptions into **Drink Sessions**
+  - Visual grouping to history
+  - Efficient BAC calculation by filtering
+  - Improved statistics
+  - Timeline graph of BAC during session
+- Visual **BAC Bar** to compare current BAC value to all-time highest
+- **User uploaded Drink Images**
+- **Drink description**
