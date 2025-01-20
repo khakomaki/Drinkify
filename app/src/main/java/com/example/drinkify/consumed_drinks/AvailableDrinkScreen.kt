@@ -38,6 +38,7 @@ fun AvailableDrinkScreen(
                     drink = drink,
                     onRecordNow = {
                         val time = System.currentTimeMillis()
+                        onEvent(ConsumedDrinkEvent.SelectDrink(drink))
                         onEvent(ConsumedDrinkEvent.SetConsumptionTime(time))
                         onEvent(ConsumedDrinkEvent.SaveConsumedDrink)
                         onEvent(ConsumedDrinkEvent.HideTimePicker)
