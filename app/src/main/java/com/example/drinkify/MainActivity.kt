@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return BACViewModel(
                     consumedDrinkDao = db.consumedDrinkDao,
+                    drinkSessionDao = db.drinkSessionDao,
                     userDao = db.userDao
                 ) as T
             }
@@ -76,6 +78,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            LaunchedEffect(Unit) {
+                consumedDrinkViewModel.recalculateBAC.collect {
+                     bacViewModel.recalculateBAC()
+                }
+            }
+
             AppNavigation(
                 drinkViewModel = drinkViewModel,
                 profileViewModel = profileViewModel,

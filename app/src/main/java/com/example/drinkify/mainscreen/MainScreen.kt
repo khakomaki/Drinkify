@@ -50,7 +50,11 @@ fun MainScreen(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    BACMeter(bac = bacState.bac)
+                    BACMeter(
+                        bac = bacState.bac,
+                        sessionLength = bacState.sessionLength,
+                        drinkImages = bacState.drinkImages
+                    )
                 }
             }
         },

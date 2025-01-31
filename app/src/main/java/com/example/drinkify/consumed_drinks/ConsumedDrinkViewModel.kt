@@ -7,7 +7,9 @@ import com.example.drinkify.core.database.ConsumedDrinkDao
 import com.example.drinkify.core.database.DrinkSessionDao
 import com.example.drinkify.core.models.ConsumedDrink
 import com.example.drinkify.core.models.DrinkSession
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -25,6 +27,9 @@ class ConsumedDrinkViewModel(
         SharingStarted.WhileSubscribed(),
         ConsumedDrinkState()
     )
+
+    private val _recalculateBAC = MutableSharedFlow<Unit>()
+    val recalculateBAC: SharedFlow<Unit> = _recalculateBAC
 
     init {
         viewModelScope.launch {
@@ -110,6 +115,9 @@ class ConsumedDrinkViewModel(
             )
             // upsert
             consumedDrinkDao.upsertConsumedDrink(consumedDrink)
+
+            // trigger immediate update
+            _recalculateBAC.emit(Unit)
         }
     }
 

@@ -49,4 +49,14 @@ interface ConsumedDrinkDao {
     """)
     @Transaction
     fun getMostConsumedDrink(userId: Int): Flow<Drink?>
+
+    // consumed drinks in session
+    @Query("""
+        SELECT *
+        FROM consumed_drink_table
+        WHERE userId = :userId
+        AND sessionId = :sessionId
+        ORDER BY timestamp DESC
+    """)
+    suspend fun getConsumedDrinksInSession(userId: Int, sessionId: Int): List<ConsumedDrinkAdvanced>
 }
